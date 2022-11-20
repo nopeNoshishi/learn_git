@@ -292,12 +292,15 @@ I like dancing on house music.
 
 ### まとめ
 `fast-forward merge`
+
 ![fast_merge.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/4abed1f6-7431-50d5-b90a-58e152633096.gif)
 
 `no fast-forward merge`
+
 ![nofast_merge1.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3a29143b-fe53-3df7-352c-ccd569373685.gif)
 
 `no fast-forward merge with conflict`
+
 ![nofast_merge2.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/2898da3a-dc15-e1fd-c991-61d80ca0f6a1.gif)
 
 
@@ -311,7 +314,7 @@ I like dancing on house music.
 <img width="450" alt="base_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/0655a75b-4466-a069-0ad7-f98a2785996c.png">
 
 ### ブランチごとごっそり移動させる
-`develop`ブランチの現在のコミット、`feature`ブランチに反映させるためには、`feature`ブランチが派生した`----から`---`に移動させる必要があります。これは`feature`ブランチから`git rebase develop`とすることで一気に移動できます。
+`develop`ブランチの現在のコミット、`feature`ブランチに反映させるためには、`feature`ブランチが派生した`----`から`---`に移動させる必要があります。これは`feature`ブランチから`git rebase develop`とすることで一気に移動できます。
 
 <img width="450" alt="move_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/acecd79a-66eb-1836-f911-a76b2ad3dbef.png">
 
