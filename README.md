@@ -13,6 +13,8 @@ Gitは、分散型バージョン管理システムと呼ばれるシステム�
 
 ### 作業フロー
 まず、大元のファイルなどの保存場所（以下、リモートレポジトリ）から、手元のパソコン（以下、ローカルレポジトリ）にコピーを作って、新しいコードやファイルを追加・編集して、今度は逆に、ローカルレポジトリからリモートレポジトリへ登録する。ローカルレポジトリは、開発者の数だけあります。
+
+
 <img width="600" alt="retool.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/22c6b2e3-aeda-44c6-8f54-3b7e80db129b.png">
 
 
@@ -48,6 +50,7 @@ Gitにおけるレポジトリとは、ファイルを保存しておくため�
 レポジトリのソースコードの変更は、ワーキングディレクトリ、ステージングエリアを通して行われます。実際には、我々がソースコードを変更するのは、ワーキングディレクトリです。新しく、`second.txt`というファイルを作成するとワーキングディレクトリにファイルが追加されます。
 
 ワーキングディレクトリは、何も特殊なことはなくて、いつもパソコンで作業する時にファイルを作成する時に自分が操作しているディレクトリのことです。Gitが管理する対象のディレクトリ（今回であれば`project`）には、Gitのステージングエリアやローカルレポジトリと接続できるよと考えてもらえれば分かりやすいと思います。
+
 <img width="400" alt="clone3.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/162c1db8-8271-fd4e-f702-2f77a0329564.png">
 
 
@@ -67,6 +70,7 @@ Gitにおけるレポジトリとは、ファイルを保存しておくため�
 
 ### リモートレポジトリを変更する
 上記作業で、自分の手元の作業は終わりました。最後に行うのが、ローカルレポジトリの変更をリモートレポジトリへ反映させることです。これを**push**と言います。リモートレポジトリに対して行うcommitだと考えると分かりやすいかもしれません。
+
 <img width="400" alt="push.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d57789fe-08f2-3234-ec5a-bf1457a6cb6d.png">
 
 ### 差分をみる
@@ -126,7 +130,9 @@ Gitにおけるレポジトリとは、ファイルを保存しておくため�
 ブランチの生やし方や運用は、開発チームごとによって異なると思います。一方で、プログラミングの命名規則のように、Gitのブランチの生やし方には一般的なモデルが存在します。簡単に２つを紹介します。こんなものがあるんだな程度でいいと思います。
 
 「Git Flow」は、かなり複雑に入り組んだ構造をしています。本来のあるべきGitの使い方みたいなモデルかなと思います。
+
 <img width="400" alt="git_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/45c382b6-e6a0-7e06-7ed7-dd0bbc6b8def.jpeg">
+
 [【図解】git-flow、GitHub Flowを開発現場で使い始めるためにこれだけは覚えておこう](https://atmarkit.itmedia.co.jp/ait/articles/1708/01/news015.html) より
 
 各ブランチの定義
@@ -137,13 +143,16 @@ Gitにおけるレポジトリとは、ファイルを保存しておくため�
 `release`:プロダクトリリースの準備用。リリース予定の機能やバグフィックスが反映された状態のdevelopから分岐する。リリース準備が整ったら、masterにマージすると共にdevelopにマージする。
 
 「GitHUb Flow」は、Git Flowをやや簡略化したモデルです。
+
 <img width="400" alt="github_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/f42c5209-2974-5035-52f7-27b19c860677.jpeg">
+
 [【図解】git-flow、GitHub Flowを開発現場で使い始めるためにこれだけは覚えておこう](https://atmarkit.itmedia.co.jp/ait/articles/1708/01/news015.html) より
 
 見ての通り、`main`と`feature`だけで構成されており、主な違いとしてプルリクエスト（下のプルで説明）というクッションでブランチ間の統合を行います。
 
 ### まとめ
 基本的にmain上で作業することはないので、行いたい作業単位でブランチを作成し、新しいコミットを作成していきましょう。
+
 ![branch_anime.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/f5158fea-ea6c-a033-11f7-27a9b152539c.gif)
 
 
