@@ -1,2 +1,0 @@
-conflictを起こすファイル
-remoteで編集した
