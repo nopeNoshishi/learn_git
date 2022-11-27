@@ -1,2 +1,2 @@
 conflictを起こすファイル
-localで編集した
+remoteで編集した
