@@ -1,0 +1,2 @@
+conflictを起こすファイル
+localで編集した
