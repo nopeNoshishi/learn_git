@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 sha-1 = { version = "0.9.1", default-features = true }
+hex = "0.4.2"
