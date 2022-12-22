@@ -2,37 +2,45 @@
 use sha1::{Digest, Sha1};
 use std::fmt;
 
-
-pub struct Blob {
-    pub size: usize,
-    pub content: String
+// blob objectにファイル名を追加する
+pub struct File {
+    pub mode: usize,
+    pub path: String,
+    pub blob_hash: Vec<u8>
 }
 
-impl Blob {
-    // contentからの作成
-    pub fn new(content: String) -> Self {
-        Self {
-            size: content.len(),
-            content
-        }
+impl File {
+    pub fn from(header: &[u8], hash: &[u8]) -> Option<self> {
+        let header = String::from_utf8(header.to_vec())
+
     }
 
-    // bytes文字列からの作成
-    pub fn from(bytes: &[u8]) -> Option<Self> {
-        let content = String::from_utf8(bytes.to_vec());
+    pub fn as_bytes(&self) -> Vec<u8> {
+        let header = format!("path {}\0", self.size);
+        println!("blob header: {:?}", &header);
+        let store = format!("{}{}", header, self.to_string());
+        println!("blob store context: {:?}", &store);
 
-        match content {
-            Ok(content) => Some(Self {
-            size: content.len(),
-            content,            
-            }),
-            _ => None
+        Vec::from(store.as_bytes())
+    }
+}
+
+
+pub struct Tree {
+    pub contents: Vec<File>,
+}
+
+
+impl Tree {
+    pub fn new(contents: Vec<File>) -> Self {
+        Self {
+            contents
         }
     }
 
     // 書き込み用にbytesに変換
     pub fn as_bytes(&self) -> Vec<u8> {
-        let header = format!("blob {}\0", self.size);
+        let header = format!("tree {}\0", self.size);
         println!("header: {:?}", &header);
         let store = format!("{}{}", header, self.to_string());
         println!("store: {:?}", &store);
@@ -44,10 +52,11 @@ impl Blob {
     pub fn calc_hash(&self) -> Vec<u8> {
         Vec::from(Sha1::digest(&self.as_bytes()).as_slice())
     }
+
 }
 
-impl fmt::Display for Blob {
+impl fmt::Display for Tree {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.content)
+        write!(f, "{}", self.contents)
     }
 }
