@@ -1,19 +1,19 @@
 # This is the original git project
 
-##　Object Implementation
+## Object Implementation
 ### blob
 ### tree
 ### commit
 
-##　Cooperation with file systems
+## Cooperation with file systems
 ### write
 ### read
 
-##　Plumbing command implementation
+## Plumbing command implementation
 ### cat-file
 ### hash-object
 
-## Porcelain　command implementation
+## Porcelain command implementation
 ### init
 ### config
 ### add
