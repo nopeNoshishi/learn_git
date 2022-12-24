@@ -1,28 +1,33 @@
 mod blob;
 use blob::Blob;
 
+use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
-use clap::{App, Arg};
+use clap::{Command, Arg};
 
 
 fn main() {
     // 引数の解析
-    let subcommand1 = App::new("blob")
-                        .arg(Arg::with_name("filename")
-                            .help("Sets the input file to use")
-                            .required(true)
-                            .index(1));
+    let about = fs::read_to_string("description/about.txt").expect("file not found");
+    let help = fs::read_to_string("description/help.txt").expect("file not found");
     
-    let command = App::new("nss_git")
+    let cmd = Command::new("nss")
+                        .about(about)
                         .version("0.0.1")
-                        .author("Noshishi. <noshishi@gmail.com>")
-                        .about("Original Git")
-                        .subcommand(subcommand1);
+                        .author("Noshishi. <noshishi@noshishi.com>")
+                        .override_help(help)
+                        .subcommand(Command::new("blob")
+                            .about("Create blob")
+                            .arg(Arg::new("filename")
+                                .value_parser(clap::builder::NonEmptyStringValueParser::new())
+                                .required(true)
+                                .help("Read file to covert blob object")
+                                .value_name("FILE")));
     
-    match command.get_matches().subcommand() {
+    match cmd.get_matches().subcommand() {
         Some(("blob", sub_m)) => {
-            let filename = sub_m.value_of("INPUT").unwrap();
+            let filename: &String = sub_m.get_one("filename").expect("`port`is required");
             let mut f = File::open(filename).expect("file not found");
 
             let mut content = String::new();
@@ -41,10 +46,3 @@ fn main() {
         _ => todo!()
     }
 }
-
-
-
-
-
-
-
