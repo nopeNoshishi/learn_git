@@ -1,0 +1,2 @@
+This is Original Git.
+Learn git and rust for good developer.

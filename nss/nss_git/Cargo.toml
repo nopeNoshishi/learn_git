@@ -6,4 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = "4.0.32"
 sha-1 = { version = "0.9.1", default-features = true }
+hex = "0.4.2"

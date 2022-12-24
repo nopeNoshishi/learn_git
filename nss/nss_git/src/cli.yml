@@ -1,0 +1,22 @@
+name: nss_git
+version: "0.0.1"
+author: Noshishi. <noshishi@gmail.com>
+about: Original Git
+args:
+    - command:
+        help: Command
+        required: true
+        index: 0
+    - INPUT:
+        help: Sets the input file to use
+        required: true
+        index: 1
+subcommands:
+    - test:
+        about: controls testing features
+        version: "1.3"
+        author: Someone E. <someone_else@other.com>
+        args:
+            - debug:
+                short: d
+                help: print debug information
