@@ -1,1 +1,1 @@
-# Gitのコマンドを理解する
+# Understanding Git Commands
