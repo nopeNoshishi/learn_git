@@ -1,118 +1,116 @@
-# コマンドを使わずに理解するGit
+# Understanding Git through images
+
+I am a newbie, still a few months into my career as a developer in Japan. I was inspired by [Nico Riedmann's Learn git concepts, not commands](https://dev.to/unseenwizzard/learn-git-concepts-not-commands-4gjc), and I have summarized git in my own way. Of course, I supplemented it with reading the [official documentation ](https://git-scm.com/doc)as well.
+Understanding git from its system structure makes git more fun. I have recently become so addicted to git that I am in the process of creating my own git system.
 
 <!-- TOC -->
 
-- [Gitとは](#Gitとは)
-	- [バージョンを管理し、作業を分散する](#バージョンを管理し、作業を分散する)
-	- [Gitを使うということ](#Gitを使うということ)
-	- [完全理解の鍵はイメージ](#完全理解の鍵はイメージ)
-- [新しい作業を始める](#新しい作業を始める)
-	- [リポジトリ](#リポジトリ)
-	- [リポジトリを複製して作業開始](#リポジトリを複製して作業開始)
-	- [(補足)ワーキングディレクトリ](#ワーキングディレクトリ)
-	- [ファイルを変更・追加する](#ファイルを変更・追加する)
-	- [リモートリポジトリを変更する](#リモートリポジトリを変更する)
-	- [差分をみる](#差分をみる)
-	- [(余談)ステージングエリアというクッション](#ステージングエリアというクッション)
-	- [まとめ](#まとめ)
-- [ブランチ](#ブランチ)
-	- [新しいブランチを作る](#新しいブランチを作る)
-	- [ブランチで作業を進める](#ブランチで作業を進める)
-	- [(余談)Git-FlowとGitHub-Flow](#Git-FlowとGitHub-Flow)
-	- [まとめ](#まとめ)
-- [マージ](#マージ)
-	- [ファストフォワード](#ファストフォワード)
-	- [ノーファストフォワード](#ノーファストフォワード)
-	- [コンフリクトに対処する](#コンフリクトに対処する)
-	- [不要なブランチは削除する](#不要なブランチは削除する)
-	- [(余談)ブランチの正体を知りたい](#ブランチの正体を知りたい)
-	- [まとめ](#まとめ)
-- [リベース](#リベース)
-	- [ブランチごとごっそり移動させる](#ブランチごとごっそり移動させる)
-	- [リベースのコンフリクトに対処する](#リベースのコンフリクトに対処する)
-- [ローカルリポジトリを最新にする](#ローカルリポジトリを最新にする)
-	- [ブランチとリポジトリ](#ブランチとリポジトリ)
-	- [最新の状況を確認する](#最新の状況を確認する)
-	- [最新の状態に更新する](#最新の状態に更新する)
-	- [プルのコンフリクトに対処する](#プルのコンフリクトに対処する)
-	- [（余談）プルリクエストの正体](#プルリクエストの正体)
-- [便利な機能](#便利な機能)
-	- [リバート](#リバート)
-	- [スタッシュ](#スタッシュ)
-	- [チェリーピック](#チェリーピック)
-	- [HEADを使いこなす](#HEADを使いこなす)
-	- [\(おまけ\)リセット](#リセット)
-- [終わりに](#終わりに)
-	- [Git以外のソースコードの管理](#Git以外のソースコードの管理)
-	- [リモートリポジトリの居場所](#リモートリポジトリの居場所)
-	- [ポインタ](#ポインタ)
-	- [さらにGitを理解するために](#さらにGitを理解するために)
-	- [お礼](#お礼)
-- [参考サイト](#参考サイト)
+- [Whati is Git?](#what-is-git)
+	- [Manage versions and Distribute work](#manage-distribute)
+	- [Using Git means](#using-git-means)
+	- [Understanding by image](#understading-by-image)
+- [Start new work](#start-new-work)
+	- [Repositories](#repositories)
+	- [Copy the repository and start working](#copy-the-repository)
+	- [(Supplemental) Working Directory](#working-directory)
+	- [Change and Add files](#change-and-add-file)
+	- [Adapt to remote repositories](#adapt-to-remote)
+	- [View Differences](#view-differences)
+	- [(Aside) One step called staging area](#staging-area)
+	- [Summary](#summary1)
+- [Branch](#branch)
+	- [Create new branch](#create-new-branch)
+	- [Work in Branches](#work-in-branches)
+	- [(Aside)Git-Flow and GitHub-Flow](#gitflow-githubflow)
+	- [Summary](#summary2)
+- [Merge](#merge)
+	- [Fast Forward](#fast-forward)
+	- [No Fast Forward](#no-fast-forward)
+	- [Deal with Conflicts](#deal-with-conflicts)
+	- [Delete unnecessary branches](#delete-unnecessary-branches)
+	- [(aside) What is the brunch?](#what-is-the-branch)
+	- [Summary](#summary3)
+- [Rebase](#rebase)
+	- [Move the branch](#move-branch)
+	- [Deal with rebase conflicts](#deal-with-rebase-conflicts)
+- [Keep local repositories up-to-date](#keep-up-to-date)
+	- [Branch and Repository](#branch-and-repository)
+	- [Check the latest status](#check-the-latest-status)
+	- [Update to the latest status](#update-to-the-status)
+	- [Deal with pull conflicts](#プルのコンフリクトに対処する)
+	- [(Aside) Identity of pull requests](#プルリクエストの正体)
+- [Useful Functions](#useful-functions)
+	- [Correct the commit](#correct-the-commit)
+	- [Delete the commit](#delete-the-commit)
+	- [Evacuate the work](#evacuate-the-commit)
+	- [Bring the commit](#bring-the-commit)
+	- [Mastering HEAD](#mastering-head)
+- [End](#end)
+	- [Source code management without Git](#source-code-managemaent-without-git)
+	- [Where is the remote repository](#where-is-the-remote-repository)
+	- [Pointer](#pointer)
+	- [To further understand Git](#to-further-understading-git)
+- [Reference](#references)
 
 <!-- TOC -->
 
-<a id="markdown-Gitとは" name="Gitとは"></a>
-## Gitとは
+<a id="markdown-what-is-git" name="what-is-git"></a>
+## Whati is Git?
 
-<a id="markdown-バージョンを管理し、作業を分散する" name="バージョンを管理し、作業を分散する"></a>
-### バージョンを管理し、作業を分散する
-Gitは、分散型バージョン管理システムと呼ばれるソースコードの管理システムの1種です。
-Gitは、ファイルの**変更履歴（バージョン）を記録・追跡**することで、過去と現在のファイルを比較し、変更点を明らかにすることで、円滑に開発作業を進めるためのツールです。
-また、一度に**複数の開発者がファイルを編集**できるシステムなので、作業を分散して行うことができます。
+<a id="markdown-manage-distribute" name="manage-distribute"></a>
+### Manage versions and Distribute work
+Git is a type of source code management system called a distributed version control system.
+Git is a tool to facilitate development work by **recording and tracking the changelog (version) of files**, comparing past and current files, and clarifying changes.
+The system also allows **multiple developers to edit files at once**, so the work can be distributed.
 
-<a id="markdown-Gitを使うということ" name="Gitを使うということ"></a>
-### Gitを使うということ
-まず、みんなで共有できる保存場所（以下、リモートリポジトリ）にあるファイルなどを、手元のパソコン（以下、ローカルリポジトリ）にコピーを作って、新しいコードやファイルを追加・編集します。
-そして、ローカルリポジトリからリモートリポジトリへ登録することでファイルを更新していくことです。
+<a id="markdown-using-git-means" name="using-git-means"></a>
+### Using Git means
+First, make a copy of the file or other files in a storage location that can be shared by everyone (from now on referred to as "remote repository") on your computer (from now on referred to as "local repository"), and then add or edit new code or files.
+Then, the files will be updated by registering them from the local repository to the remote repository.
 
 <img width="600" alt="retool.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/22c6b2e3-aeda-44c6-8f54-3b7e80db129b.png">
 
 
-<a id="markdown-完全理解の鍵はイメージ" name="完全理解の鍵はイメージ"></a>
-### 完全理解の鍵はイメージ
-Gitを扱う上で、重要なのは「何」から「何」へ、が「どんな作業」を行うのかを追うことです。
-コマンド操作だけだと、何が起きているかを理解できず、誤ったコマンドを入力する可能性があります。
-
+<a id="markdown-understading-by-image" name="understading-by-image"></a>
+### Understading by image
+When dealing with Git, it is important to follow "how to work" from "what" to "what".
+If you only operate commands, you may not understand what is happening and use the wrong command.
 
 **(info)**
-
-Gitの操作は、操作前と操作後でどんなことが起こっているのかをイメージしよう。
-
-
-<a id="markdown-新しい作業を始める" name="新しい作業を始める"></a>
-## 新しい作業を始める
-
-<a id="markdown-リポジトリ" name="リポジトリ"></a>
-### リポジトリ
-Gitにおけるリポジトリとは、ファイルを保存しておくための倉庫で、リモートとローカルの二つがあります。
-
-**リモートリポジトリ**は、ソースコードをインターネットのサーバーに置いて、みんなで共有できるリポジトリです。
-**ローカルリポジトリ**は、ソースコードを手元パソコンに置いて、自分だけが変更できるリポジトリです。
+When manipulating Git, try to imagine what is happening before and after the operation.
 
 
-<a id="markdown-リポジトリを複製して作業開始" name="リポジトリを複製して作業開始"></a>
-### リポジトリを複製して作業開始
-まず、自分の開発環境を用意します。
-といっても、どのディレクトリで作業するかを決めるだけです。
-例えば、ホームディレクトリでもいいし、普段使っているディレクトリで構いません。
+<a id="markdown-start-new-work" name="start-new-work"></a>
+## Start new work
 
-次に、リモートリポジトリからファイルをコピーして持ってきます。
-これを`clone`といいます。
+<a id="markdown-repositories" name="repositories"></a>
+### Repositories
+A repository in Git is a storage for files, which can be remote or local.
 
-この段階で一緒に作業ディレクトリが作成されます。
-なので、新しいディレクトリを作成しなくていいです。
-`git clone`というコマンドで行います。
+**Remote Repository** is a repository where the source code is placed on a server on the Internet and can be shared by everyone.
+**Local repository** is a repository where the source code is located on your computer and only you can make changes.
 
+
+<a id="markdown-copy-the-repository" name="copy-the-repository"></a>
+### Copy the repository and start working
+First, prepare your own development environment.
+All you need only to do is decide in which directory you will work.
+For example, your home directory is fine, or any directory you normally use.
+
+Next, copy and bring the files from the remote repository.
+This is called `clone`.
+
+A working directory is created together at this stage.
+So there is no need to create a new directory.
 
 <img width="450" alt="clone.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/36772bce-9111-1f50-bafd-97246035e78e.png">
 
-`project`というリモートリポジトリには、`first.txt`だけ入っていて、そのリモートリポジトリを`clone`した時のイメージです。
+The remote repository called `project` contains only `first.txt`, and this is the image when you `clone` the remote repository.
 
-<a id="markdown-ワーキングディレクトリ" name="ワーキングディレクトリ"></a>
-### (補足)ワーキングディレクトリ
-ワーキングディレクトリは、何も特殊なディレクトリではなくて、いつもパソコンで作業するディレクトリのことです。
-Gitが管理する対象のディレクトリ（今回であれば`project`）には、Gitのステージングエリアやローカルリポジトリと接続できると考えてもらえれば分かりやすいと思います。
+<a id="markdown-working-directory" name="ワーキングディworking-directoryレクトリ"></a>
+###(Supplemental) Working Directory
+A working directory is not any special directory, but a directory where you always work on your computer.
+It's easier to understand if you think of it as a directory where you can connect to the target directory that Git manages (in this case, `project`) with a Git staging area or local repository.
 
 <img width="400" alt="clone3.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/162c1db8-8271-fd4e-f702-2f77a0329564.png">
 
@@ -693,6 +691,3 @@ Gitのコアの部分はシンプルなキー・バリュー型データスト�
 - [Git Documentation](https://git-scm.com/doc)
 - [Learn git concepts, not commands](https://dev.to/unseenwizzard/learn-git-concepts-not-commands-4gjc)
 - [図解 Git](https://marklodato.github.io/visual-git-guide/index-ja.html)
-- [いまさらだけどGitを基本から分かりやすくまとめてみた](https://qiita.com/gold-kou/items/7f6a3b46e2781b0dd4a0)
-- [git add ってなんのためにやるの？](https://kray.jp/blog/expound-git-add/)
-
