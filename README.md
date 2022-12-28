@@ -200,119 +200,114 @@ The basic workflow is to `clone` once and then `add`, `commit`, and `push` for e
 
 <a id="markdown-branch" name="branch"></a>
 ## Branch
-ファイルの変更や追加を複数の分岐で作業を行うために`branch`を作ります。
-`main`ブランチで保存しているファイルは、現在進行形で使用されています。
-ブランチを分ける理由は、**現在稼働しているソースコードに影響を与えることなく作業を行う**ためです。
+We create a `branch` to change and add files in multiple branches.
+The files saved in the `main` branch are in ongoing use.
+The reason for the separate branches is to work **without affecting the currently running source code**.
+
 
 <a id="markdown-create-new-branch" name="create-new-branch"></a>
 ### Create new branch
-`develop`というブランチを作ってみます。
-`git branch <new branch>`や`git checkout -b <new branch>`で作ることができます。
-前者はブランチを作るだけ、後者はブランチを作ってそのブランチに移動します。
-（ブランチはリポジトリ内で管理されています。）
+Let's create the branch called `develop`!
+We can create a branch with `git branch <new branch>` or `git checkout -b <new branch>`.
+The former just create a branch, the latter create a branch and moves you to that branch.
+(Branches are maintained in the repository.)
 
 
 <img width="450" alt="cretae_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a7f499f9-bf5e-0c58-1a35-59cd3e2a4c30.png">
 
-ブランチを生やす時のポイントは、**どのブランチを派生元にするか**ということです。
-派生元を`git checkout -b <new branch> <from branch>`として指定することができます。
-指定しなければ、現在作業しているブランチが`<from branch>`になります。
-
+The key point when generating branches is **which branch to derive from**.
+We can specify the source as `git checkout -b <new branch> <from branch>`.
+If we don't, the branch you are currently working on becomes the `<from branch>`.
 
 
 **(info)**
 
-ブランチは、実は**コミット（厳密にいうとコミットオブジェクトのハッシュ値）のポインタ**です。
-新しいブランチを生やすということは、派生元のブランチがポインタしているコミットを、新しいブランチも同様にポインタすることを意味します。
-
+A branch is actually a **pointer** to the commit (strictly speaking, a hash of commit objects).
+Generating a new branch means that the new branch indicate to the commit that the from　branch pointed to as well.
 
 <a id="markdown-work-in-branches" name="work-in-branches"></a>
 ### Work in Branches
-作業するブランチを移動することを`checkout`すると言います。
-現在作業しているブランチのポインタを`HEAD`と呼びます。
-つまり、`main`ブランチから`develop`ブランチ移動するというのは`HEAD`を変えることを意味します。
+Moving the branch is called `checking out`.
+The pointer to the branch you are currently working on is called `HEAD`.
+So, moving from the `main` branch to the `develop` branch means changing the `HEAD`.
 
 <img width="450" alt="checkout_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3a7379b1-7a1c-35ba-02be-619d13a192ad.png">
 
+Now both branches point to the commit named `Atr3ul`.
+You just added `second.txt` by committing in the `main` branch, so you are ahead of the commit `f27baz`.
+From here, let's say you change `second.txt` in the `develop` branch and make a new commit.
 
-現在は、`Atr3ul`というコミットを両方のブランチが指しています。
-先ほどは`second.txt`を`main`ブランチでコミットして追加したので、`f27baz`というコミットからひとつ前に進んでいる状態です。
-ここから、`develop`ブランチで`second.txt`を変更し、新しいコミットを行うとします。
 
 <img width="450" alt="in_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/1ae0aa22-4c8d-411b-b20e-c29047dcdb4d.png">
 
 
-そうすると図のように、`develop`ブランチは`m9sgle`というコミットを作成し、そのコミットをポインタすることになりました。
+Then, as shown in the figure, the `develop` branch created a commit called `m9sgle` and pointed to that commit.
 
-現在のHEADの位置（作業ブランチの位置）やファイルがどの段階まで作業を進めたか、あるいは誰がその作業を行なっているかの状態を`status`と言います。
-`git status`を入力すると、詳細な情報が確認できます。
+The current HEAD position (working branch position), what stage the file has been worked on, or the status of who is working on it is called `status`.
 
 
 **(info)**
 
-コミットの矢印の理由について、オブジェクト指向の考え方に慣れている方だと分かるかもしれません。
-これは「親」コミットと「子」コミットの関係を表しています。
-`親←-子`、つまり親(コミット)から生まれた子(コミット)がどれだけ成長（変化）したかというのが、前提としてあります。
-
+If you are familiar with object-oriented, you may understand the reason for the arrow on the commit.
+It represents the relationship between a "parent" commit and a "child" commit.
+The assumption is that `parent←-child`, that is, how much the child (commit) born from the parent (commit) has grown (changed).
 
 <a id="markdown-gitflow-githubflow" name="gitflow-githubflow"></a>
 ### (Aside)Git-Flow and GitHub-Flow
-ブランチの生やし方や運用は、開発チームごとによって異なると思います。
-一方で、プログラミングの命名規則のように、Gitのブランチの生やし方には一般的なモデルが存在します。
-簡単に２つを紹介します。こんなものがあるんだな程度でいいと思います。
+The way branches to manage will vary on development team.
+On the other hand, like programming naming conventions, there is a general model for how to grow branches in Git.
+Here are two simple ones. I think it's enough to know that there is such a thing.
 
 <br>
 <br>
 
-「Git Flow」は、かなり複雑に入り組んだ構造をしています。
-本来のあるべきGitの使い方みたいなモデルかなと思います。
-
+The "Git Flow" is a fairly complex and intricate structure.
+I think it's a model of how Git should be used.
 
 <img width="450" alt="git_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a05bf11e-8ad0-e82f-e5f4-76498f4b5c46.png">
 
+**Definition of each branch**.
 
-**各ブランチの定義**
+`master`: Branch to release a product. No working on this branch.
 
-`master`:プロダクトとしてリリースする用のブランチ。※このブランチ上での作業は行わない
+`development`: Branch to develope a product. When ready to release, merge to `release`. No working on this branch.
 
-`develop`:開発用ブランチ。リリース準備ができたらreleaseへマージする。※このブランチ上での作業は行わない
+`feature`: Branch for adding features, merged into development when ready for release.
 
-`feature`:機能の追加用。developから分岐し、developにマージする。
+`hotfix`: For urgent post-release work (critical bug fixes, etc.), branch off from master, merge into master, and merge into develop.
 
-`hotfix`:リリース後の緊急対応（クリティカルなバグフィックスなど）用。masterから分岐し、masterにマージすると共にdevelopにマージする。
-
-`release`:プロダクトリリースの準備用。リリース予定の機能やバグフィックスが反映された状態のdevelopから分岐する。
-リリース準備が整ったら、masterにマージすると共にdevelopにマージする。
+`release`: For preparation of product release. Branch from `develop` with features and bug fixes to be released.
+When ready for release, merge to master and merge to develop.
 
 <br>
 <br>
-「GitHub Flow」は、Git Flowをやや簡略化したモデルです。
+
+The "GitHub Flow" is a somewhat simplified model of the Git Flow.
 
 <img width="450" alt="github_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b717c9a0-7612-906f-2f10-3bf7a600e755.png">
 
-見ての通り、`master`と`feature`だけで構成されており、主な違いとしてプルリクエスト（下のプルで説明）というクッションでブランチ間の統合を行います。
+As you can see, it consists of only `master` and `feature`.
+The important difference is the cushion of `pull requests` (explained in the pull below), which allows integration between branches.
 
 <a id="markdown-summary2" name="summary2"></a>
 ### Summary
-基本的にmain(master)上で作業することはないので、行いたい作業単位でブランチを作成し、新しいコミットを作成していきましょう。
+Basically, since there is no work on main (master), we create a branch for each work unit we want to do and create a new commit.
 
 ![branch_anime.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/f5158fea-ea6c-a033-11f7-27a9b152539c.gif)
 
 **(info)**
 
-`branch`:コミットに対する新しいポインタ
-`checkout`:`HEAD`を移動させて、作業する`branch`を変える。
-
+`branch`: New pointer to the commit
+`checkout`: Move `HEAD` to change the `branch` to work on.
 
 <a id="markdown-merge" name="merge"></a>
 ## Merge
-枝分かれたブランチ同士を統合することを`merge`と言います。
-基本的に、`main`ブランチや`develop`ブランチに対して統合を行なっていきます。
+integrating the branches is called `merge`.
+Basically, we merge into the `main` or `develop` branch.
+Be careful not to mistake the subject of which branch is merging (absorbing) which branch.
+We will always move (HEAD) to the branch from which you are deriving, and then do the integration from the branch from which you are deriving.
 
-注意点は、**「どのブランチ」が「どのブランチ」を統合(吸収)するかの主語を間違わないこと**です。
-必ず、派生元のブランチに（HEADを）移動して、派生先のブランチからの統合を行うことになります。
-
-現在、`feature`ブランチで作業を行なっていて、下記のような　`third.txt`を作成しました。
+I am currently working on the `feature` branch and have created the following `third.txt`.
 
 ```text third.txt
 Hello, World! I'm noshishi, from Japan.
@@ -320,7 +315,7 @@ I like dancing on house music.
 ```
 
 <br>
-そして、`add`して`commit`まで終えました。  
+Then We `add` and finished up to `commit`.  
 <br>
 
 <img width="450" alt="feature_commit.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3fbb3116-4439-7753-74ec-260b043777f3.png">
@@ -328,43 +323,39 @@ I like dancing on house music.
 
 <a id="markdown-fast-forward" name="fast-forward"></a>
 ### Fast Forward
-`feature`ブランチが、派生元である`develop`ブランチから辿れるのコミットを指しているとき、`develop`ブランチは`fast-forward`な状態と言います。
+When the `feature` branch points to the commit that can be traced back to the `develop` branch, the `develop` branch is in a `fast-forward` state.
 
-まずは、`checkout`で`develop`へ移動します。
+First, move to `develop` with `checkout`.
 
 <img width="450" alt="checkout_develop.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d2564a3b-ab4f-32a3-edb4-5dffb38c7f89.png">
 
-この場合、`develop`ブランチは全く進んでいないので、`feature`ブランチを`merge`すると、単にコミットを前に進めるだけになります。
-この時、`develop`ブランチと`feature`ブランチは同じコミットを共有することになります。
+In this case, the `develop` branch has not progressed at all, so to `merge` the `feature` branch will simply move the commit forward.
+In this case, the `develop` and `feature` branches share the same commit.
 
 <img width="450" alt="merge_feature_no_conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/95d4195d-a9a5-1fec-710e-85887c2f7f1f.png">
 
 <a id="markdown-no-fast-forward" name="no-fast-forward"></a>
 ### No Fast Forward
-もし、`develop`ブランチがコミットやマージによって、新しいコミットに進んでいたらどうなるでしょうか？
-これを`no fast-forward`な状態と言います。
+What if the `develop` branch has progressed to a new commit by commit or merge?
+This is called a `no fast-forward` situation.
 
-`develop`ブランチでは、`first.txt`を変更を行なって`commit`まで終えました。
-そのため、`develop`ブランチと'`feature`ブランチは、完全に枝分かれてしまいました。
+In the `develop` branch, you have made changes to `first.txt` and have finished `commit`.
+So the `develop` branch and the `feature` branch are completely split.
 
 <img width="450" alt="develop_commi.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d97a8652-dd94-2835-4cf2-94eed01e6353.png">
 
-
-`develop`ブランチから、`feature`ブランチを`merge`しようとすると、Gitは変更履歴同士を確認します。
-もしお互いに競合しあう編集をしていない場合は、すぐに`merge commit`が作成されます。
-これを`Automatic merge`と呼ばれます。
+If you try to `merge` a `feature` branch from a `develop` branch, Git will check your changelog against each other.
+If there are no conflicting edits, a `merge commit` is created immediately.
+This is called an `automatic merge`.
 
 <img width="450" alt="merge_feature_auto.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a81e9577-6aec-e565-71bf-0836fd883974.png">
 
 <a id="markdown-deal-with-conflicts" name="deal-with-conflicts"></a>
 ### Deal with Conflicts
+In the `no fast-forward` state, the differences in work content. is called `conflict`.
+In this case, we must manually fix the `conflict` content and `commit`.
 
-`no fast-forward`状態で、作業内容が競合していることを`conflict`と言います。
-この場合は、手動で`conflict`をしている内容を修正し、`commit`を行います。
-
-
-`develop`ブランチでは、以下のような`third.txt`が作成され、`commit`されています。
-
+In the `develop` branch, we created the following `third.txt` and `committed`.
 
 ```text third.txt
 Hello, World! I'm nope, from USA.
@@ -372,20 +363,20 @@ I like dancing on house music.
 ```
 <br>
 
-`develop`ブランチでは、`I'm nope, from USA`と書いてあり、
-`feature`ブランチでは、`I'm noshishi, from Japan`と書いてあります。
-1行目の内容が競合している状態です。
+In the `develop` branch, `I'm nope, from USA`.
+In the `feature` branch, `I'm noshishi, from Japan`.
+The content of the first line is in conflict.
 
-この時に`merge`を行うと、`conflict`が起こります。
-Gitが`conflict`を解決してから`commit`してくれと指示が出てきます。
+If you do a `merge` at this time, a `conflict` will occur.
+Git will ask you to `commit` after resolving the `conflict`.
 
 <img width="450" alt="conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/794285e4-077a-17b1-4743-0e1f2685fba7.png">
 
-
 <br>
-（作業場所は`develop`ブランチ）
 
-指示通りに`third.txt`を見てみると、以下のような追記がされています。
+(The branch we work on is the `develop` branch)
+
+If you look at `third.txt` as instructed, you will see the following additions
 
 ```text third.txt　（conflict後）
  <<<<<<<< HEAD
@@ -396,53 +387,54 @@ Gitが`conflict`を解決してから`commit`してくれと指示が出てき�
  I like dancing on house music.
 ```
 
-`=======`で区切られた上側の`HEAD`が`develop`ブランチの内容を表しています。
-下側が`feature`ブランチを表しています。
+The upper `HEAD`, separated by `=======`, represents the contents of the `develop` branch.
+The lower side represents the `feature` branch.
 
-まずどちらを採用するかを考え、今回は`feature`ブランチでの変更内容を採用することにしました。
-その時の作業は、`third.txt`を手作業で編集（不要な部分を削除）するだけです。
+You first considered which one to adopt, and decided to adopt the changes made in the `feature` branch this time.
+The only operation then is to edit `third.txt` by hand (delete unnecessary parts).
 
-```text third.txt　(編集後)
+```text third.txt　(After editing)
 Hello, World! I'm noshishi, from Japan.
 I like dancing on house music.
 ```
 
-そして次に行うのが、`add`して`commit`です。
-`conflict`が解消され、新しい`merge commit`が作成されます。
+And the next thing you do is `add` and `commit`.
+The `conflict` is resolved and a new `merge commit` is created.
+
 
 <img width="450" alt="hand_merge.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/5a20b54e-33bd-a973-e201-8bbdaba8c0cc.png">
 
-初心者が恐怖のコンフリクトですが、これを覚えればもう怖くありません。
+Conflicts are feared by beginners, but once you learn this, you will no longer be afraid.
 
 
 **(info)**
 
-`merge`を行なって`conflict`を解消したらなぜもう一度`merge`しないのでしょうか？と疑問に思うと思います。
-`merge`を一度実行した時点で`develop`ブランチは`merge`状態に入り、ブランチ同士の比較し`conflict`がなければ、新しいファイルを自動で`add`,`commit`を行なってくれています。
-なので、`conflict`を解消した後に、**特別に`commit`しているのではない**ということです。
-だからこそ`merge commit`と呼ばれるわけです。
-
+If you `merge` and resolve the `conflict`, why not `merge` again?
+When you `merge` once, the `develop` branch enters the `merge` state, and if there are no `conflicts`, the new files are automatically `added` and `commit`.
+So it is not a special `commit` after `conflict` is resolved.
+That's why it's called `merge commit`.
 
 <a id="markdown-delete-unnecessary-branches" name="delete-unnecessary-branches"></a>
 ### Delete unnecessary branches
-統合されたブランチは、基本お役御免なので、削除していきます。
-ブランチを放置しておくと、削除したいブランチから他のブランチに移動して、`git branch -d <branch>`すればおさらばです。
-ちなみに、削除されたらそのブランチのコミットは無くなるのかというとそうではありません。
-マージしたブランチにしっかりと引き継がれています。
-`git log`を使用すると、ブランチ内で行なったすべてのコミットおよびマージしたブランチのコミットを閲覧できます。
+The merged branch is basically useless, so we will delete it.
+If we leave a branch alone, you can move from the branch you want to delete to another branch and `git branch -d <branch>`.
+You may think the commits on that branch are deleted.
+In fact, the commits are carried over to the merged branch.
+You can use `git log` to see all the commits you've made on the branch and the commits on the merged branch.
 
 <a id="markdown-what-is-the-branch" name="what-is-the-branch"></a>
 ### (Aside) What is the brunch
-ブランチは、コミットを指すポインタと言いましたが、もうひとつ重要なデータを保持しています。
-それは、そのブランチで行ってきたすべてのコミットです。
-つまり、ブランチは、コミットの集合体であり、なおかつその中で最新のコミットを指すポインタを持っているということです。
+We said that a branch is a pointer to a commit, but it also holds another important data.
+It is all the commits that have been made on that branch.
 
-図で表すと以下の通りです。
+A branch is a collection of commits, and it has a pointer to the latest commit in that collection. (Strictly speaking, the commit can trace back to previous commits.)
+
+The following diagram illustrates this.
 
 <img width="450" alt="branch_image.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/8cbb8c69-d048-778c-9d2d-db1f3be3b3be.png">
 
-だから、Git Flowの様に横軸でブランチを考えることができるんです。
-ちなみに、上の図を横軸にブランチを置いて書いてみるとこうなります。
+So we can think of branches on a horizontal axis like Git Flow.
+By the way, if you draw the above diagram with branches on the horizontal axis, it looks like this.
 
 <img width="450" alt="branch_image2.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/97ed7459-a4ee-afd9-1e2e-d7a0ffbf8f1e.png">
 
@@ -460,7 +452,7 @@ I like dancing on house music.
 
 **(info)**
 
-`merge`:特定のブランチ(`main`や`develop`など)に、作業用のブランチ（`feature`など）を統合（吸収）し、新しいコミットを作成すること。
+`merge`: To integrate (absorb) a working branch (such as `feature`) into a specific branch (such as `main` or `develop`) and create a new commit.
 
 
 <a id="markdown-rebase" name="rebase"></a>
@@ -648,42 +640,43 @@ HEADが指すものは`develop`ブランチ、`develop`ブランチが指すも�
 
 <a id="markdown-source-code-managemaent-without-git" name="source-code-managemaent-without-git"></a>
 ### Source code management without Git
-Gitと同じ歴史を持ったMercurialというサービスがあります。
-特徴は、Gitのような柔軟性を犠牲に非常にシンプルなコマンドラインインターフェース(CLI)を採用していることです。
-最近だと、このMercurialをベースにMeta社がSaplingという新しいソースコード管理システムをオープンソースで公開されましたね。
-また今度、ちょっと触ってみて感想を書いてみたいなと思います。
+Mercurial has the same history as Git.
+Mercurial has a very simple command line interface (CLI) that sacrifices the flexibility of Git.
+Recently, based on Mercurial, Meta released a new source code management system called Sapling as open source.
+I would like to try it again and write about my impressions.
 
 <a id="markdown-where-is-the-remote-repository" name="where-is-the-remote-repository"></a>
 ### Where is the remote repository
-リモートリポジトリ用のサーバーを貸してくれるサービスをホスティングサービスと言います。
-代表的なものであれば、GitHub, Bitbucket、プライベートに使用するAws Code Commitなどがあります。
-GitとGit Hubは、全く別物です。
-ちなみに、上で書いた通り、リモートリポジトリ用のサーバーは自分達のサーバーでも大丈夫です。
+A hosting service is a service that rents a server for a remote repository.
+Typical examples are GitHub, Bitbucket, and Aws Code Commit for private use.
+Git and Git Hub are completely different.
+By the way, as mentioned above, we can use our own servers for remote repositories.
 
 <a id="markdown-pointer" name="pointer"></a>
 ### Pointer
-C言語のようなメモリを直接扱うプログラミングに触れたことがある方は、なんとなく「ポインタ」の意味がわかると思います。
-一方で、初学者の方にとって、すごく曖昧なものに感じると思います。
+If you have been exposed to programming that deals directly with memory, such as the C programming language, you will somehow know what a "pointer" is.
+On the other hand, for a beginning programmer, it seems very vague.
 
-コミットオブジェクトは、リポジトリ内に保存されていると言いました。
-リポジトリ内に、たくさんのコミットオブジェクトが溢れていたら、どのように欲しいオブジェクトを選ぶことができるでしょうか。
+I said that commit objects are stored in the repository.
+If there are many commit objects in the repository, how can you select the one you want?
 
-それは、特定のコミットオブジェクトありかを突き止めるラベル(住所)が必要になります。
+We need a label (address) to locate a particular commit object.
 
 <img width="600" alt="pointer.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/1d4f5378-f935-7703-b5bb-93ac76b73b28.png">
 
+The "pointer" is a valuable data that indicates us to the label so that we don't forget it.
 
-「ポインタ」は、そのラベルを忘れないように指差してくれる貴重なデータというわけです。
-
-ちなみにラベルは、ハッシュ関数と呼ばれる関数を通じて不思議な文字列へと変換されたものを使います。
-気になる方は、[Gitのハッシュ値の求め方](https://engineering.mercari.com/blog/entry/2016-02-08-173000/)を参考にしてください。
+The label, by the way, is converted into a mysterious string through a `hash function`.
+If you are curious, please refer to [How does Git compute file hashes?](https://stackoverflow.com/questions/7225313/how-does-git-compute-file-hashes).
 
 <a id="markdown-to-further-understading-git" name="to-further-understading-git"></a>
 ### To further understand Git
-この記事で言及できなかったことがたくさんあります。
-Gitのコアの部分はシンプルなキー・バリュー型データストアであることや、バリューとなるGitオブジェクトの詳細、そしてオブジェクトをどのように扱うかなど。
-いつか完全攻略したいと思います。
+There are many things I failed to mention in this article.
 
+- The core of Git is a simple key-value type data store
+- Details of the Git object that is the value
+- How to relate with each objects.
+I hope to fully explore this someday.
 
 <a id="markdown-references" name="references"></a>
 ## References
