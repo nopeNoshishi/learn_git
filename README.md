@@ -77,6 +77,7 @@ When dealing with Git, it is important to follow "how to work" from "what" to "w
 If you only operate commands, you may not understand what is happening and use the wrong command.
 
 **(info)**
+
 When manipulating Git, try to imagine what is happening before and after the operation.
 
 
@@ -105,6 +106,7 @@ This is called `clone`.
 The remote repository called `project` contains only `first.txt`, and this is the image when you `clone` the remote repository.
 
 **(info)**
+
 Of course, you may create a local repository first and then reflect the remote repository.
 This is called `initialize` and allows you to convert a directory you are already working on into a repository.
 
@@ -143,6 +145,7 @@ In this case, we added a file, so write `git commit -m 'add second.txt'`.
 
 
 **(info)**
+
 When you commit, a **commit object** is created in the repository.
 A simple explanation of a commit object is the data that has the updater's information and the modified file.
 (All data is saved, not just the differences, but the entire state of the file at that moment (snapshot).
@@ -192,6 +195,7 @@ The basic workflow is to `clone` once and then `add`, `commit`, and `push` for e
 
 
 **(info)**
+
 `clone`: Make a copy from the remote repository to your development environment (local repository and working directory).
 `add`: Add files from the working directory to the staging area and prepare them for commit.
 `commit`: Register the file from the staging area to the local repository. At this time, a commit object is created.
@@ -441,12 +445,15 @@ By the way, if you draw the above diagram with branches on the horizontal axis, 
 <a id="markdown-summary3" name="summary3"></a>
 ### Summary
 `fast-forward merge`
+
 ![fast_merge.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/4abed1f6-7431-50d5-b90a-58e152633096.gif)
 
 `no fast-forward merge`
+
 ![nofast_merge1.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3a29143b-fe53-3df7-352c-ccd569373685.gif)
 
 `no fast-forward merge with conflict`
+
 ![nofast_merge2.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/2898da3a-dc15-e1fd-c991-61d80ca0f6a1.gif)
 
 
@@ -457,183 +464,178 @@ By the way, if you draw the above diagram with branches on the horizontal axis, 
 
 <a id="markdown-rebase" name="rebase"></a>
 ## Rebase
-各ブランチの派生元のコミットを変えてブランチ同士を統合することを`rebase`と言います。
-`merge`に似ていますが、異なる点は、作業を行うブランチが 「派生先」ブランチということです。
+`Rebase` is the process of merging branches by changing the commit from which the branch is derived.
+It is similar to `merge`, except that the branch you are working on is the destination branch.
 
-`develop`ブランチと`feature`ブランチで作業していているとしましょう。
+Suppose you are working on the `develop` and `feature` branches.
 
 <img width="450" alt="base_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/0655a75b-4466-a069-0ad7-f98a2785996c.png">
 
 <a id="markdown-move-branch" name="move-branch"></a>
 ### Move the branch
-`develop`ブランチの現在のコミット、`feature`ブランチに反映させるためには、`feature`ブランチが派生した`gp55sw`コミットから`3x7oit`コミットに移動させる必要があります。
+You may think to reflect the current commit on `develop` branch into `feature` branch.
+You need to move `feature` branch from the `gp55sw` commit to the `3x7oit` commit.
 
-これは`feature`ブランチから`git rebase develop`とすることで一気に移動できます。
+This can be moved at once from the `feature` branch by doing a `git rebase develop`.
+
 
 <img width="450" alt="move_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/acecd79a-66eb-1836-f911-a76b2ad3dbef.png">
 
-
-`merge`をしているというより、`develop`ブランチの最新のコミットから`feature`ブランチを生やし直すに近いです。
-ただし、コミットごと移動し、新しいコミットを行うことが違いです。
+This process is more like re-growing the `feature` branch from the latest commit on the `develop` branch than doing a `merge`.
+The difference is that you move the entire commit and make a new commit.
 
 <img width="450" alt="rebase_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d37b85ab-7b78-8a68-3302-6081edc036b1.png">
 
-なぜ、こんな移動（統合）をするのかというと、一つは　`fast-forward`になりいつでも`merge`を行いやすいことです。
-もう一つは、コミットが一直線になることで容易にコミット履歴を辿れ、ファイルの更新順に整合性を持たせることができるためです。
+One reason for such a move is that it is `fast-forward` and easy to `merge` at any time.
+The other reason is that the commits are aligned so that the commit history can be easily traced and the order in which files are updated is consistent.
 
 <a id="markdown-deal-with-rebase-conflicts" name="deal-with-rebase-conflicts"></a>
 ### Deal with rebase conflicts
-もちろん`rebase`にも`conflict`が存在します。
-上記の場合、`feature`ブランチでは、`fourth.txt`を追加しましたが、その後`develop`ブランチでのコミットでは、`fourth.txt`に関わる変更がないため、`conflict`は起こりません。
+Of course there is also a `conflict` in `rebase`.
+You added `fourth.txt` in the `feature` branch, but you didn't change `fourth.txt` in the `develop` branch.
+There is `conflict`.
 
-ですが、以下のように変更内容が被っていた場合、`conflict`が起こります。
+However, if the following changes are covered by each other, `conflict` will occur.
 
 <img width="450" alt="rebase_conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/c04e5c00-7523-ccfd-9311-421fe252fdc0.png">
 
-でも`merge`と同じように対処すれば大丈夫です。
-ただし、差分を確認してファイルの編集を終えたら、`git rebase --continue`で作業を終わりましょう。
-`commit`しなくても自動でコミットしてくれます。
-
+You can just deal with it the same way you would with `merge`.
+However, After you have checked the diff and finished editing the file, you should finish your work with `git rebase --continue`.
+You don't have to `commit`, it will commit automatically.
 
 **(info)**
 
-`rebase`:ブランチの派生元であるコミットを移動させて新しいコミットを行うこと。
-
+`rebase`: Move the commit from which the derived branch to a new commit.
 
 <a id="markdown-keep-up-to-date" name="keep-up-to-date"></a>
 ## Keep local repositories up-to-date
-ローカルである程度作業を進めると、リモートリポジトリが他の開発者によって更新されている場合があります。
-この場合において、リモートリポジトリの情報を再度ローカルリポジトリに反映させるために行うのが`pull`です。
+After some local work, you may be faced with a situation where the remote repository has been updated by another developer.
+In this case, you can use `pull` to re-install the information from the remote repository back into the local repository.
 
 <a id="markdown-branch-and-repository" name="branch-and-repository"></a>
 ### Branch and Repository
-ブランチは、各リポジトリに保存されています。
-実際に作業を行うブランチです。
+Branches are stored in each repository.
+This is the branch where the actual work is done.
 
 <img width="450" alt="brancha.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/76f507a4-232e-894e-e01f-328ab7138577.png">
 
-一方で、ローカルリポジトリには、リモートリポジトリをコピーしたブランチがあります。
-これは「リモート追跡ブランチ」と呼ばれます。
-`remotes/<remote branch>`でリモートのブランチと紐づく名前のブランチです。
+On the other hand, the local repository has the copied branches of the remote repository.
+This is called a "remote tracking branch".
+It is a branch with a name that is tied to the remote branch in `remotes/<remote branch>`.
 
-これは、あくまでもリモートリポジトリを監視しているに過ぎません。
+This is only monitoring the remote repository.
 
 <img width="450" alt="remotes.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/9c014980-79e5-bba6-c3d8-c8f6a237178d.png">
 
-
 <a id="markdown-check-the-latest-status" name="check-the-latest-status"></a>
 ### Check the latest status
-リモートリポジトリの`develop`ブランチがリモート追跡ブランチより一つ進んでいる状況だったとします。。
+Suppose you have a situation where the `develop` branch in the remote repository is one step ahead of the remote tracking branch.
 
 <img width="450" alt="pull_notupdate.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3393d6c6-1a65-31c7-7afb-f98170f79872.png">
 
-リモートリポジトリのブランチの最新の状況をリモート追跡ブランチに反映させることを`fetch`と言います。
+Reflecting the latest status of a branch in a remote repository on a remote tracking branch is called `fetch`.
 
 <img width="450" alt="fetch_update.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/ff486c7c-963d-5962-0878-a144aab5893f.png">
 
 
 <a id="markdown-update-to-the-status" name="update-to-the-status"></a>
 ### Update to the latest status
-もう少し踏み込んで、ローカルブランチにも反映させたい場合、`pull`を行います。
-`pull`するとまず、ローカルのリモート追跡ブランチが更新されます。
-その後にローカルブランチに`merge`を行います。
+If you want to have it reflected in your local branch, you can do a `pull`.
+When you `pull`, the local remote tracking branch is updated first.
+Then `merge` to the local branch.
 
 <img width="450" alt="pull_update.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a9526959-34d0-20fd-d128-4b5b37f19298.png">
 
-
-今回は、`develop`ブランチの一つ先に進んだコミットがあったので、ローカルブランチの`develop`ブランチに`merge`して新たなコミットが作成されました。
+This time, there was a commit that went one branch ahead of the `develop` branch, so you created a new commit by `merge` into the local `develop` branch.
 
 <a id="markdown-deal-with-pull-conflicts" name="deal-with-pull-conflicts"></a>
 ### Deal with pull conflicts
-リモートリポジトリのコミットで行われた変更と、ローカルリポジトリのコミットで行った変更が競合してしまった時、`pull`したときにリモート追跡ブランチとローカルブランチで`conflict`が起こります。下記の場合、`remotes/develop`と`develop`ブランチが競合しています。
+When a remote repository commit conflict with a local repository commit, you face the `conflict` between the remote tracking branch and the local branch when you `pull`.
+In the following case, the `remotes/develop` and `develop` branches are in conflict.
 
 <img width="450" alt="pull_conflict.png" src="">
 
-`push`は、`fetch`と`merge`なので、`merge`の`conflict`と同じ対処方法で解決できます。
-今回は`develop`が`remotes/develop`を`merge`するので、作業ブランチは`develop`です。
-原因のフォルダを開いて、修正したら`commit`を行いましょう。
-
+Since `push` is `fetch` and `merge`, you can solve in the same way as `conflict` in `merge`.
+This time, `develop` `merges` `remotes/develop`, so the working branch is `develop`.
+Open the folder that caused the problem and `commit` when you have fixed it.
 
 <a id="markdown-identity-of-pull-requests" name="identity-of-pull-requests"></a>
 ### (Aside) Identity of pull requests
-基本的にリモートとローカルの関係は、リモートリポジトリからローカルリポジトリにpullし、ローカルリポジトリからリモートリポジトリにpushすることになります。
-ですが、GitHubをはじめとするサービスには、ローカルリモートリポジトリ内にあるブランチから、mainブランチのようなブランチにmergeする前にrequestを送るという仕組みをとっています。(※12/9追記)ローカルから直接反映する訳ではありません。
-というのは、開発者の個人の判断mainブランチなどにpushして、リモートリポジトリを更新してしまうと誰もチェックできずに大きな障害が発生する可能性があります。
-一旦上位の開発者がコードをレビューするプロセスを挟むのがpull requestです。
+Basically, the relationship between remote and local is pull from the remote repository to the local repository and push from the local repository to the remote repository.
+However, GitHub and other services have a mechanism to send a request before merge from a branch in a remote repository to a branch such as main.
+This is because if a developer pushes to the main branch and updates the remote repository, no one can check it and a major failure may occur.
+`Pull request` is to insert a process where a higher level developer reviews the code once.
 
 <img width="450" alt="pull_request.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/49ceb654-292c-0b89-f537-1a771be1a7cd.png">
 
 **(info)**
 
-`pull`:`fetch` + `merge`。`pull`は、リモートリポジトリの状態をローカルリポジトリに反映させること。
-
+`pull`: `fetch` + `merge`. `pull` is to reflect the state of the remote repository in the local repository.
 
 <a id="markdown-useful-functions" name="useful-functions"></a>
 ## Useful Functions
 
 <a id="markdown-correct-the-commit" name="correct-the-commit"></a>
 ### Correct the commit
-前回行ったコミットを訂正するための`commit`することを`revert`と言います。
-例えば`m9sgLe`で`second.txt`をローカルリポジトリに追加したとしましょう。
+To `commit` to correct a previous commit is called `revert`.
+For example, suppose you added `second.txt` to your local repository with `m9sgLe`.
 
-`revert`を行うと、その`commit`が取り消されて`second.txt`はローカルリポジトリから無くなります。
+When you `revert`, the commit is revoked and `second.txt` is no longer in the local repository.
 
 <img width="450" alt="revert.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/255417d6-a05f-b68c-89eb-436ec1b92c7c.png">
 
-`revert`の良さは、`commit`を残せることです。後ほど紹介する`reset`と区別しましょう。
+The merit of `revert` is that it allows you to leave `commit`. 
+Distinguish this from `reset`, which will be introduced later.
 
 <a id="markdown-delete-the-commit" name="delete-the-commit"></a>
 ### Delete the commit
-現在の最新のコミットを取り消してもう一度作業することを`reset`といいます。
+To undo the current latest commit and work on it again is called `reset`.
 
-`--soft`オプションを使用すると`add`した直後に戻ることができます。
-`--mixed`オプションを使用すると、ワーキングディレクトリで作業していた段階に戻ることができます。
-`--hard <commit>`オプションを使用すると、戻るコミット地点までのすべてのコミットを削除し、指定コミットに`HEAD`を移動させます。
+The `--soft` option allows you to go back to the stage immediately after `add`.
+The `--mixed` option allows you to go back to the stage where you were working in the working directory.
+The `--hard <commit>` option removes all commits up to the commit point you are returning to and moves `head` to the specified commit.
+
 
 <img width="450" alt="reset.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/6d4a7eee-ce0a-4af5-ef0f-5541cb6b66b2.png">
 
+Since `reset` **completely deletes** the commit, it is recommended that you do not use it unless you have a good reason, especially for the '--hard' option.
 
-`reset`は**完全にコミットが削除**されるので、特に'--hard'オプションについては、余程のことがなければ使用しないことを推奨します。
-
+If you want to get your commits back, you can use `git reflog` to see the commits you have deleted.
 
 <a id="markdown-evacuate-the-work" name="evacuate-the-work"></a>
 ### Evacuate the work
-変更ファイルがあると他のブランチに移動できないので、`commit`までするか変更を破棄してしまうかを選択しなければなりません。
-そんな時に活躍するのが`stash`です。
-ワーキングディレクトリやステージングエリアにあるファイルを一時避難させることができます。
+Since you can't move to another branch if there are change files, you have to choose between going to `commit` or discarding your changes.
+This is where `stash` comes in handy.
+You can temporarily evacuate files in the working directory or staging area.
 
 <img width="450" alt="stash.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a8e83f88-bce5-560b-d496-80bea2918a65.png">
 
-他のブランチに移動したい時、`stash`し、帰ってきたら`stash pop`で避難したファイルを取り戻して作業を再開します。
-
+When you want to move to another branch, `stash` and when you return, use `stash pop` to retrieve the evacuated files and resume work.
 
 <a id="markdown-bring-the-commit" name="bring-the-commit"></a>
 ### Bring the commit
-任意のコミットを現在のブランチに持ってきてコミットを作ることを`cherry-pick`と言います。
-まさにいいとこ取りのような機能です。
+Bringing any commit to the current branch to create a commit is called `cherry-pick`.
+It is a very nice feature.
 
 <img width="450" alt="cherry.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/27601d74-62c8-2814-dfc6-3e31e6abf246.png">
 
-
-以前に`feature`ブランチで実装した**〇〇〇な機能だけ**持ってきて、現在`develop`ブランチの作業に使用したいときなどに使用します。
+This is used when you want to bring back **only** features previously implemented in a `feature` branch and use them for work in the current `develop` branch, for example.
 
 <a id="markdown-mastering-head" name="mastering-head"></a>
 ### Mastering HEAD
-HEADは、現在作業中のブランチのポインタと説明しました。
-また、ブランチはコミットを指すポインタだ、とも説明しました。
+I explained that HEAD is a pointer to the branch you are currently working on.
+I also explained that a branch is a pointer to a commit.
 
-下の図を見てください。
+See the figure below.
 
 <img width="450" alt="head.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b4c0651f-a613-f858-9f53-7bf9de227f5d.png">
 
-HEADが指すものは`develop`ブランチ、`develop`ブランチが指すもの`eaPk76`というコミットです。
-つまり、この状況でのHEADは、`eaPk76`のコミットを指しているということになります。
+HEAD points to the `develop` branch, and the `develop` branch points to the commit `eaPk76`.
+So, HEAD in this situation refers to the commit `eaPk76`.
 
-よくGitのドキュメントや記事などに、コマンドの後ろに`HEAD`を使うのを見たことがありませんか？
-例えば、`git revert HEAD`など。
-これは、`HEAD`をコミットと置き換えることができるから実現できるコマンドなのです。
-
-
+Have you often seen Git documentation or articles that use `HEAD` after a command?
+For example, `git revert HEAD`.
+This is a command that can be achieved because you can replace `HEAD` with commit.
 
 <a id="markdown-end" name="end"></a>
 ## End
