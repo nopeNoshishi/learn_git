@@ -2,7 +2,23 @@
 # The <> brackets are not needed for the actual command.
 # Think of it as an assignment.
 
+# watch help
+## main command explanation
+git help
+## all command explanation
+git help -a
+## view all concept manual
+git help -g
+## each command helper
+git help <command>
+## view git basic usage by concept
+git help <concept>
+
+# init
+git init
+
 # clone
+git clone <HTTP>
 git clone <SHH>
 
 # add
@@ -54,5 +70,7 @@ git chery-pick <commit>
 git log
 git log --oneline
 git log --oneline --graph
+
+# reflog
 
 ### updating....
