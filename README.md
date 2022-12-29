@@ -1,323 +1,317 @@
-# コマンドを使わずに理解するGit
+# Understanding Git through images
+
+I am a newbie, still a few months into my career as a developer in Japan. I was inspired by [Nico Riedmann's Learn git concepts, not commands](https://dev.to/unseenwizzard/learn-git-concepts-not-commands-4gjc), and I have summarized git in my own way. Of course, I supplemented it with reading the [official documentation ](https://git-scm.com/doc)as well.
+Understanding git from its system structure makes git more fun. I have recently become so addicted to git that I am in the process of creating my own git system.
 
 <!-- TOC -->
 
-- [Gitとは](#Gitとは)
-	- [バージョンを管理し、作業を分散する](#バージョンを管理し、作業を分散する)
-	- [Gitを使うということ](#Gitを使うということ)
-	- [完全理解の鍵はイメージ](#完全理解の鍵はイメージ)
-- [新しい作業を始める](#新しい作業を始める)
-	- [リポジトリ](#リポジトリ)
-	- [リポジトリを複製して作業開始](#リポジトリを複製して作業開始)
-	- [(補足)ワーキングディレクトリ](#ワーキングディレクトリ)
-	- [ファイルを変更・追加する](#ファイルを変更・追加する)
-	- [リモートリポジトリを変更する](#リモートリポジトリを変更する)
-	- [差分をみる](#差分をみる)
-	- [(余談)ステージングエリアというクッション](#ステージングエリアというクッション)
-	- [まとめ](#まとめ)
-- [ブランチ](#ブランチ)
-	- [新しいブランチを作る](#新しいブランチを作る)
-	- [ブランチで作業を進める](#ブランチで作業を進める)
-	- [(余談)Git-FlowとGitHub-Flow](#Git-FlowとGitHub-Flow)
-	- [まとめ](#まとめ)
-- [マージ](#マージ)
-	- [ファストフォワード](#ファストフォワード)
-	- [ノーファストフォワード](#ノーファストフォワード)
-	- [コンフリクトに対処する](#コンフリクトに対処する)
-	- [不要なブランチは削除する](#不要なブランチは削除する)
-	- [(余談)ブランチの正体を知りたい](#ブランチの正体を知りたい)
-	- [まとめ](#まとめ)
-- [リベース](#リベース)
-	- [ブランチごとごっそり移動させる](#ブランチごとごっそり移動させる)
-	- [リベースのコンフリクトに対処する](#リベースのコンフリクトに対処する)
-- [ローカルリポジトリを最新にする](#ローカルリポジトリを最新にする)
-	- [ブランチとリポジトリ](#ブランチとリポジトリ)
-	- [最新の状況を確認する](#最新の状況を確認する)
-	- [最新の状態に更新する](#最新の状態に更新する)
-	- [プルのコンフリクトに対処する](#プルのコンフリクトに対処する)
-	- [（余談）プルリクエストの正体](#プルリクエストの正体)
-- [便利な機能](#便利な機能)
-	- [リバート](#リバート)
-	- [スタッシュ](#スタッシュ)
-	- [チェリーピック](#チェリーピック)
-	- [HEADを使いこなす](#HEADを使いこなす)
-	- [\(おまけ\)リセット](#リセット)
-- [終わりに](#終わりに)
-	- [Git以外のソースコードの管理](#Git以外のソースコードの管理)
-	- [リモートリポジトリの居場所](#リモートリポジトリの居場所)
-	- [ポインタ](#ポインタ)
-	- [さらにGitを理解するために](#さらにGitを理解するために)
-	- [お礼](#お礼)
-- [参考サイト](#参考サイト)
+- [Whati is Git?](#what-is-git)
+	- [Manage versions and Distribute work](#manage-distribute)
+	- [Using Git means](#using-git-means)
+	- [Understanding by image](#understading-by-image)
+- [Start new work](#start-new-work)
+	- [Repositories](#repositories)
+	- [Copy the repository and start working](#copy-the-repository)
+	- [(Supplemental) Working Directory](#working-directory)
+	- [Change and Add files](#change-and-add-file)
+	- [Adapt to remote repositories](#adapt-to-remote)
+	- [View Differences](#view-differences)
+	- [(Aside) One step called staging area](#staging-area)
+	- [Summary](#summary1)
+- [Branch](#branch)
+	- [Create new branch](#create-new-branch)
+	- [Work in Branches](#work-in-branches)
+	- [(Aside)Git-Flow and GitHub-Flow](#gitflow-githubflow)
+	- [Summary](#summary2)
+- [Merge](#merge)
+	- [Fast Forward](#fast-forward)
+	- [No Fast Forward](#no-fast-forward)
+	- [Deal with Conflicts](#deal-with-conflicts)
+	- [Delete unnecessary branches](#delete-unnecessary-branches)
+	- [(aside) What is the brunch?](#what-is-the-branch)
+	- [Summary](#summary3)
+- [Rebase](#rebase)
+	- [Move the branch](#move-branch)
+	- [Deal with rebase conflicts](#deal-with-rebase-conflicts)
+- [Keep local repositories up-to-date](#keep-up-to-date)
+	- [Branch and Repository](#branch-and-repository)
+	- [Check the latest status](#check-the-latest-status)
+	- [Update to the latest status](#update-to-the-status)
+	- [Deal with pull conflicts](#deal-with-pull-conflicts)
+	- [(Aside) Identity of pull requests](#identity-of-pull-requests)
+- [Useful Functions](#useful-functions)
+	- [Correct the commit](#correct-the-commit)
+	- [Delete the commit](#delete-the-commit)
+	- [Evacuate the work](#evacuate-the-work)
+	- [Bring the commit](#bring-the-commit)
+	- [Mastering HEAD](#mastering-head)
+- [End](#end)
+	- [Source code management without Git](#source-code-managemaent-without-git)
+	- [Where is the remote repository](#where-is-the-remote-repository)
+	- [Pointer](#pointer)
+	- [To further understand Git](#to-further-understading-git)
+- [Reference](#references)
 
 <!-- TOC -->
 
-<a id="markdown-Gitとは" name="Gitとは"></a>
-## Gitとは
+<a id="markdown-what-is-git" name="what-is-git"></a>
+## Whati is Git?
 
-<a id="markdown-バージョンを管理し、作業を分散する" name="バージョンを管理し、作業を分散する"></a>
-### バージョンを管理し、作業を分散する
-Gitは、分散型バージョン管理システムと呼ばれるソースコードの管理システムの1種です。
-Gitは、ファイルの**変更履歴（バージョン）を記録・追跡**することで、過去と現在のファイルを比較し、変更点を明らかにすることで、円滑に開発作業を進めるためのツールです。
-また、一度に**複数の開発者がファイルを編集**できるシステムなので、作業を分散して行うことができます。
+<a id="markdown-manage-distribute" name="manage-distribute"></a>
+### Manage versions and Distribute work
+Git is a type of source code management system called a distributed version control system.
+Git is a tool to facilitate development work by **recording and tracking the changelog (version) of files**, comparing past and current files, and clarifying changes.
+The system also allows **multiple developers to edit files at once**, so the work can be distributed.
 
-<a id="markdown-Gitを使うということ" name="Gitを使うということ"></a>
-### Gitを使うということ
-まず、みんなで共有できる保存場所（以下、リモートリポジトリ）にあるファイルなどを、手元のパソコン（以下、ローカルリポジトリ）にコピーを作って、新しいコードやファイルを追加・編集します。
-そして、ローカルリポジトリからリモートリポジトリへ登録することでファイルを更新していくことです。
+<a id="markdown-using-git-means" name="using-git-means"></a>
+### Using Git means
+First, make a copy of the file or other files in a storage location that can be shared by everyone (from now on referred to as "remote repository") on your computer (from now on referred to as "local repository"), and then add or edit new code or files.
+Then, the files will be updated by registering them from the local repository to the remote repository.
 
 <img width="600" alt="retool.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/22c6b2e3-aeda-44c6-8f54-3b7e80db129b.png">
 
 
-<a id="markdown-完全理解の鍵はイメージ" name="完全理解の鍵はイメージ"></a>
-### 完全理解の鍵はイメージ
-Gitを扱う上で、重要なのは「何」から「何」へ、が「どんな作業」を行うのかを追うことです。
-コマンド操作だけだと、何が起きているかを理解できず、誤ったコマンドを入力する可能性があります。
-
+<a id="markdown-understading-by-image" name="understading-by-image"></a>
+### Understading by image
+When dealing with Git, it is important to follow "how to work" from "what" to "what".
+If you only operate commands, you may not understand what is happening and use the wrong command.
 
 **(info)**
 
-Gitの操作は、操作前と操作後でどんなことが起こっているのかをイメージしよう。
+When manipulating Git, try to imagine what is happening before and after the operation.
 
 
-<a id="markdown-新しい作業を始める" name="新しい作業を始める"></a>
-## 新しい作業を始める
+<a id="markdown-start-new-work" name="start-new-work"></a>
+## Start new work
 
-<a id="markdown-リポジトリ" name="リポジトリ"></a>
-### リポジトリ
-Gitにおけるリポジトリとは、ファイルを保存しておくための倉庫で、リモートとローカルの二つがあります。
+<a id="markdown-repositories" name="repositories"></a>
+### Repositories
+A repository in Git is a storage for files, which can be remote or local.
 
-**リモートリポジトリ**は、ソースコードをインターネットのサーバーに置いて、みんなで共有できるリポジトリです。
-**ローカルリポジトリ**は、ソースコードを手元パソコンに置いて、自分だけが変更できるリポジトリです。
+**Remote Repository** is a repository where the source code is placed on a server on the Internet and can be shared by everyone.
+**Local repository** is a repository where the source code is located on your computer and only you can make changes.
 
 
-<a id="markdown-リポジトリを複製して作業開始" name="リポジトリを複製して作業開始"></a>
-### リポジトリを複製して作業開始
-まず、自分の開発環境を用意します。
-といっても、どのディレクトリで作業するかを決めるだけです。
-例えば、ホームディレクトリでもいいし、普段使っているディレクトリで構いません。
+<a id="markdown-copy-the-repository" name="copy-the-repository"></a>
+### Copy the repository and start working
+First, prepare your own development environment.
+All you need only to do is decide in which directory you will work.
+For example, your home directory is fine, or any directory you normally use.
 
-次に、リモートリポジトリからファイルをコピーして持ってきます。
-これを`clone`といいます。
-
-この段階で一緒に作業ディレクトリが作成されます。
-なので、新しいディレクトリを作成しなくていいです。
-`git clone`というコマンドで行います。
-
+Next, copy and bring the files from the remote repository.
+This is called `clone`.
 
 <img width="450" alt="clone.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/36772bce-9111-1f50-bafd-97246035e78e.png">
 
-`project`というリモートリポジトリには、`first.txt`だけ入っていて、そのリモートリポジトリを`clone`した時のイメージです。
+The remote repository called `project` contains only `first.txt`, and this is the image when you `clone` the remote repository.
 
-<a id="markdown-ワーキングディレクトリ" name="ワーキングディレクトリ"></a>
-### (補足)ワーキングディレクトリ
-ワーキングディレクトリは、何も特殊なディレクトリではなくて、いつもパソコンで作業するディレクトリのことです。
-Gitが管理する対象のディレクトリ（今回であれば`project`）には、Gitのステージングエリアやローカルリポジトリと接続できると考えてもらえれば分かりやすいと思います。
+**(info)**
+
+Of course, you may create a local repository first and then reflect the remote repository.
+This is called `initialize` and allows you to convert a directory you are already working on into a repository.
+
+
+<a id="markdown-working-directory" name="ワーキングディworking-directoryレクトリ"></a>
+### (Supplemental) Working Directory
+A working directory is not any special directory, but a directory where you always work on your computer.
+It's easier to understand if you think of it as a directory where you can connect to the target directory that Git manages (in this case, `project`) with a Git staging area or local repository.
 
 <img width="400" alt="clone3.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/162c1db8-8271-fd4e-f702-2f77a0329564.png">
 
-<a id="markdown-ファイルを変更・追加する" name="ファイルを変更・追加する"></a>
-### ファイルを変更・追加する
-リポジトリのソースコードの変更は、ワーキングディレクトリ、ステージングエリアを通して行われます。
-実際には、我々がソースコードを変更するのは、ワーキングディレクトリです。
+<a id="markdown-change-and-add-file" name="change-and-add-file"></a>
+### Change and Add file
+Changes to the source code are made through the working directory, the staging area.
+Actually, in the working directory, we work.
 
-新しく、`second.txt`というファイルを作成してみます。
+Let's create a new file called `second.txt`.
 
 <img width="450" alt="create_file.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/8361cfea-fca9-3193-835b-e31b449df6b8.png">
 
-次に、ステージングエリアに変更したファイルを追加します。
-これを`add`と言います。
+Next, move the modified file to the staging area.
+This is called `add`.
 
-変更したファイルをローカルリポジトリに反映させる前にワンクッションおくのがGitの特徴です。
-なぜこのクッションがあるのか後ほど詳しく説明します。
-`git add`というコマンドで行います。
+It is a feature of Git that there is a cushion before changes are reflected in the local repository.
+I will explain why this cushion exists in more detail later.
 
 <img width="450" alt="add.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/e975ecbf-c65f-f9ab-6dec-75984de363d6.png">
 
-そして、ステージングエリアで追加された内容をローカルリポジトリへ登録します。
-これを`commit`と言います。
-`commit`するとステージングエリアは、空になります。
+Then, we registere the content in the staging area to the local repository.
+This is called `commit`.
 
-ちなみに、`commit`する際にコメントがかけます。
-今回なら、ファイルを追加したので、`git commit -m 'add second.txt'`と書きましょう。
+By the way, we can comment when you `commit`.
+In this case, we added a file, so write `git commit -m 'add second.txt'`.
 
 <img width="450" alt="commit.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/f8908fd7-72b1-51d7-4aa6-c742b56a4fac.png">
 
 
 **(info)**
 
-コミットをすると、リポジトリに**コミットオブジェクト**が作成されます。
-コミットオブジェクトを簡単に説明すると、更新者の情報や変更後のファイルが保存されているデータです。
-（このときデータは、差分だけではなく、その瞬間のファイルの状態（スナップショット）全てが保存されます。）
-Gitのオブジェクトについては、[Gitのオブジェクトの中身](https://zenn.dev/kaityo256/articles/objects_of_git)を参考にしてください。
+When you commit, a **commit object** is created in the repository.
+A simple explanation of a commit object is the data that has the updater's information and the modified file.
+(All data is saved, not just the differences, but the entire state of the file at that moment (snapshot).
+Please refer to [Git Objects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects) for more information about Git objects.
 
 
-<a id="markdown-リモートリポジトリを変更する" name="リモートリポジトリを変更する"></a>
-### リモートリポジトリを変更する
-上記作業で、自分の手元の作業は終わりました。
-最後に行うのが、ローカルリポジトリの変更をリモートリポジトリへ反映させることです。
-これを`push`と言います。
+<a id="markdown-adapt-to-remote" name="adapt-to-remote"></a>
+### Adapt to remote repositories
+Then, the work is done!
+The last step is to reflect the changes in the local repository to the remote repository.
+This is called `push`.
 
 <img width="400" alt="push.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d57789fe-08f2-3234-ec5a-bf1457a6cb6d.png">
 
-リモートリポジトリに対して行うcommitだと考えると分かりやすいかもしれません。
+It may be easier to understand if you think of it as a commit to a remote repository.
 
-<a id="markdown-差分をみる" name="差分をみる"></a>
-### 差分をみる
-同じファイルの同士の変更点を`diff`といいます。
-作業の途中で自分が行った変更を確認することができます。
-`git diff`というコマンドを使用します。
+<a id="markdown-view-differences" name="view-differences"></a>
+### View Differences
+Changes between the same file are called `diff`.
+We can see the changing points in the file.
 
-コマンドの詳しい説明は省きますが、よく使う３つを紹介します。
-`add`する前に、元のワーキングディレクトリとの変更点をみる`git diff`。
-`add`した後に、作業中のワーキングディレクトリとの変更点を見るなら`git diff --stage`。
-コミット同士を比較するなら`git diff <commit> <commit>`など。
+I won't go into the details of the commands, but here are three that I use frequently.
+`git diff --stage` to see the changes from the original working directory before you `add`.
+`git diff --stage` to see changes to the working directory after `add`.
+`git diff <commit> <commit>` to compare commits.
 
-<a id="markdown-ステージングエリアというクッション" name="ステージングエリアというクッション"></a>
-### (余談)ステージングエリアというクッション
-開発作業が大きくなると、多くの変更を一つのワーキングディレクトリで行うことあります。
-全ての変更を一気にローカルレポジトリに登録するとどうなるでしょうか？
-この場合、コミットを解析する時に、ある機能をどこで実装したかわからないといったことが起こりうります。
 
-Gitでは、１つの機能につき一つの`commit`を行うことが推奨されています。
-そのために、`commit`を行う単位を細かく分けることができるステージングエリアがあるということです。
+<a id="markdown-staging-area" name="staging-area"></a>
+### (Aside) One step called staging area
+As development work grows, we often make many changes in one working directory.
+What happens if you put all the changes in a local repository at once?
+In this case, when parsing the commits, you may not know where a feature was implemented.
+
+In Git, it is recommended to do one `commit` per feature.
+This is why there is a staging area where you can subdivide the `commit` unit into smaller units.
 
 <img width="400" alt="push.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/5b25c70d-baf5-0913-d220-f60aedf583ea.png">
 
 
-必要な分だけステージングし、作業を進めたり、先に`commit`することで、実装ごとに履歴を辿れる効率的な開発を進めていこうというのがGitのコンセプトなのです。
+The concept of Git is to stage only what is needed, and then proceed with the work or `commit` ahead of time to promote efficient development that can be traced back through the history of each implementation.
 
-<a id="markdown-まとめ" name="まとめ"></a>
-### まとめ
-一度`clone`して,作業ごとに`add`,`commit`,`push`が基本的な作業の流れです。
+<a id="markdown-summary1" name="summary1"></a>
+### Summary
+The basic workflow is to `clone` once and then `add`, `commit`, and `push` for each working.
 
 ![basic.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/9dccfc0e-f2d9-5405-29c4-890f34894308.gif) 
 
 
 **(info)**
 
-`clone`:リモートリポジトリから自分の開発環境（ローカルリポジトリとワーキングディレクトリ）にコピーを作る。
-`add`:ワーキングディレクトリからステージングエリアにファイルを追加し、コミットの準備をする。
-`commit`:ステージングエリアからローカルリポジトリに登録する。この時、コミットオブジェクトが作成される。
-`push`:ローカルリポジトリからリモートリポジトリへ変更内容を登録する。
+`clone`: Make a copy from the remote repository to your development environment (local repository and working directory).
+`add`: Add files from the working directory to the staging area and prepare them for commit.
+`commit`: Register the file from the staging area to the local repository. At this time, a commit object is created.
+`push`: Register changes from the local repository to the remote repository.
 
 
+<a id="markdown-branch" name="branch"></a>
+## Branch
+We create a `branch` to change and add files in multiple branches.
+The files saved in the `main` branch are in ongoing use.
+The reason for the separate branches is to work **without affecting the currently running source code**.
 
-<a id="markdown-ブランチ" name="ブランチ"></a>
-## ブランチ
-ファイルの変更や追加を複数の分岐で作業を行うために`branch`を作ります。
-`main`ブランチで保存しているファイルは、現在進行形で使用されています。
-ブランチを分ける理由は、**現在稼働しているソースコードに影響を与えることなく作業を行う**ためです。
 
-<a id="markdown-新しいブランチを作る" name="新しいブランチを作る"></a>
-### 新しいブランチを作る
-`develop`というブランチを作ってみます。
-`git branch <new branch>`や`git checkout -b <new branch>`で作ることができます。
-前者はブランチを作るだけ、後者はブランチを作ってそのブランチに移動します。
-（ブランチはリポジトリ内で管理されています。）
+<a id="markdown-create-new-branch" name="create-new-branch"></a>
+### Create new branch
+Let's create the branch called `develop`!
+We can create a branch with `git branch <new branch>` or `git checkout -b <new branch>`.
+The former just create a branch, the latter create a branch and moves you to that branch.
+(Branches are maintained in the repository.)
 
 
 <img width="450" alt="cretae_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a7f499f9-bf5e-0c58-1a35-59cd3e2a4c30.png">
 
-ブランチを生やす時のポイントは、**どのブランチを派生元にするか**ということです。
-派生元を`git checkout -b <new branch> <from branch>`として指定することができます。
-指定しなければ、現在作業しているブランチが`<from branch>`になります。
-
+The key point when generating branches is **which branch to derive from**.
+We can specify the source as `git checkout -b <new branch> <from branch>`.
+If we don't, the branch you are currently working on becomes the `<from branch>`.
 
 
 **(info)**
 
-ブランチは、実は**コミット（厳密にいうとコミットオブジェクトのハッシュ値）のポインタ**です。
-新しいブランチを生やすということは、派生元のブランチがポインタしているコミットを、新しいブランチも同様にポインタすることを意味します。
+A branch is actually a **pointer** to the commit (strictly speaking, a hash of commit objects).
+Generating a new branch means that the new branch indicate to the commit that the from　branch pointed to as well.
 
-
-<a id="markdown-ブランチで作業を進める" name="ブランチで作業を進める"></a>
-### ブランチで作業を進める
-作業するブランチを移動することを`checkout`すると言います。
-現在作業しているブランチのポインタを`HEAD`と呼びます。
-つまり、`main`ブランチから`develop`ブランチ移動するというのは`HEAD`を変えることを意味します。
+<a id="markdown-work-in-branches" name="work-in-branches"></a>
+### Work in Branches
+Moving the branch is called `checking out`.
+The pointer to the branch you are currently working on is called `HEAD`.
+So, moving from the `main` branch to the `develop` branch means changing the `HEAD`.
 
 <img width="450" alt="checkout_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3a7379b1-7a1c-35ba-02be-619d13a192ad.png">
 
+Now both branches point to the commit named `Atr3ul`.
+You just added `second.txt` by committing in the `main` branch, so you are ahead of the commit `f27baz`.
+From here, let's say you change `second.txt` in the `develop` branch and make a new commit.
 
-現在は、`Atr3ul`というコミットを両方のブランチが指しています。
-先ほどは`second.txt`を`main`ブランチでコミットして追加したので、`f27baz`というコミットからひとつ前に進んでいる状態です。
-ここから、`develop`ブランチで`second.txt`を変更し、新しいコミットを行うとします。
 
 <img width="450" alt="in_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/1ae0aa22-4c8d-411b-b20e-c29047dcdb4d.png">
 
 
-そうすると図のように、`develop`ブランチは`m9sgle`というコミットを作成し、そのコミットをポインタすることになりました。
+Then, as shown in the figure, the `develop` branch created a commit called `m9sgle` and pointed to that commit.
 
-現在のHEADの位置（作業ブランチの位置）やファイルがどの段階まで作業を進めたか、あるいは誰がその作業を行なっているかの状態を`status`と言います。
-`git status`を入力すると、詳細な情報が確認できます。
+The current HEAD position (working branch position), what stage the file has been worked on, or the status of who is working on it is called `status`.
 
 
 **(info)**
 
-コミットの矢印の理由について、オブジェクト指向の考え方に慣れている方だと分かるかもしれません。
-これは「親」コミットと「子」コミットの関係を表しています。
-`親←-子`、つまり親(コミット)から生まれた子(コミット)がどれだけ成長（変化）したかというのが、前提としてあります。
+If you are familiar with object-oriented, you may understand the reason for the arrow on the commit.
+It represents the relationship between a "parent" commit and a "child" commit.
+The assumption is that `parent←-child`, that is, how much the child (commit) born from the parent (commit) has grown (changed).
 
-
-<a id="markdown-Git-FlowとGitHub-Flow" name="Git-FlowとGitHub-Flow"></a>
-### （余談）Git-FlowとGitHub-Flow
-ブランチの生やし方や運用は、開発チームごとによって異なると思います。
-一方で、プログラミングの命名規則のように、Gitのブランチの生やし方には一般的なモデルが存在します。
-簡単に２つを紹介します。こんなものがあるんだな程度でいいと思います。
+<a id="markdown-gitflow-githubflow" name="gitflow-githubflow"></a>
+### (Aside)Git-Flow and GitHub-Flow
+The way branches to manage will vary on development team.
+On the other hand, like programming naming conventions, there is a general model for how to grow branches in Git.
+Here are two simple ones. I think it's enough to know that there is such a thing.
 
 <br>
 <br>
 
-「Git Flow」は、かなり複雑に入り組んだ構造をしています。
-本来のあるべきGitの使い方みたいなモデルかなと思います。
-
+The "Git Flow" is a fairly complex and intricate structure.
+I think it's a model of how Git should be used.
 
 <img width="450" alt="git_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a05bf11e-8ad0-e82f-e5f4-76498f4b5c46.png">
 
+**Definition of each branch**.
 
-**各ブランチの定義**
+`master`: Branch to release a product. No working on this branch.
 
-`master`:プロダクトとしてリリースする用のブランチ。※このブランチ上での作業は行わない
+`development`: Branch to develope a product. When ready to release, merge to `release`. No working on this branch.
 
-`develop`:開発用ブランチ。リリース準備ができたらreleaseへマージする。※このブランチ上での作業は行わない
+`feature`: Branch for adding features, merged into development when ready for release.
 
-`feature`:機能の追加用。developから分岐し、developにマージする。
+`hotfix`: For urgent post-release work (critical bug fixes, etc.), branch off from master, merge into master, and merge into develop.
 
-`hotfix`:リリース後の緊急対応（クリティカルなバグフィックスなど）用。masterから分岐し、masterにマージすると共にdevelopにマージする。
-
-`release`:プロダクトリリースの準備用。リリース予定の機能やバグフィックスが反映された状態のdevelopから分岐する。
-リリース準備が整ったら、masterにマージすると共にdevelopにマージする。
+`release`: For preparation of product release. Branch from `develop` with features and bug fixes to be released.
+When ready for release, merge to master and merge to develop.
 
 <br>
 <br>
-「GitHub Flow」は、Git Flowをやや簡略化したモデルです。
+
+The "GitHub Flow" is a somewhat simplified model of the Git Flow.
 
 <img width="450" alt="github_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b717c9a0-7612-906f-2f10-3bf7a600e755.png">
 
-見ての通り、`master`と`feature`だけで構成されており、主な違いとしてプルリクエスト（下のプルで説明）というクッションでブランチ間の統合を行います。
+As you can see, it consists of only `master` and `feature`.
+The important difference is the cushion of `pull requests` (explained in the pull below), which allows integration between branches.
 
-<a id="markdown-まとめ" name="まとめ"></a>
-### まとめ
-基本的にmain(master)上で作業することはないので、行いたい作業単位でブランチを作成し、新しいコミットを作成していきましょう。
+<a id="markdown-summary2" name="summary2"></a>
+### Summary
+Basically, since there is no work on main (master), we create a branch for each work unit we want to do and create a new commit.
 
 ![branch_anime.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/f5158fea-ea6c-a033-11f7-27a9b152539c.gif)
 
 **(info)**
 
-`branch`:コミットに対する新しいポインタ
-`checkout`:`HEAD`を移動させて、作業する`branch`を変える。
+`branch`: New pointer to the commit
+`checkout`: Move `HEAD` to change the `branch` to work on.
 
+<a id="markdown-merge" name="merge"></a>
+## Merge
+integrating the branches is called `merge`.
+Basically, we merge into the `main` or `develop` branch.
+Be careful not to mistake the subject of which branch is merging (absorbing) which branch.
+We will always move (HEAD) to the branch from which you are deriving, and then do the integration from the branch from which you are deriving.
 
-<a id="マージ-まとめ" name="マージ"></a>
-## マージ
-枝分かれたブランチ同士を統合することを`merge`と言います。
-基本的に、`main`ブランチや`develop`ブランチに対して統合を行なっていきます。
-
-注意点は、**「どのブランチ」が「どのブランチ」を統合(吸収)するかの主語を間違わないこと**です。
-必ず、派生元のブランチに（HEADを）移動して、派生先のブランチからの統合を行うことになります。
-
-現在、`feature`ブランチで作業を行なっていて、下記のような　`third.txt`を作成しました。
+I am currently working on the `feature` branch and have created the following `third.txt`.
 
 ```text third.txt
 Hello, World! I'm noshishi, from Japan.
@@ -325,51 +319,47 @@ I like dancing on house music.
 ```
 
 <br>
-そして、`add`して`commit`まで終えました。  
+Then We `add` and finished up to `commit`.  
 <br>
 
 <img width="450" alt="feature_commit.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3fbb3116-4439-7753-74ec-260b043777f3.png">
 
 
-<a id="markdown-ファストフォワード" name="ファストフォワード"></a>
-### ファストフォワード
-`feature`ブランチが、派生元である`develop`ブランチから辿れるのコミットを指しているとき、`develop`ブランチは`fast-forward`な状態と言います。
+<a id="markdown-fast-forward" name="fast-forward"></a>
+### Fast Forward
+When the `feature` branch points to the commit that can be traced back to the `develop` branch, the `develop` branch is in a `fast-forward` state.
 
-まずは、`checkout`で`develop`へ移動します。
+First, move to `develop` with `checkout`.
 
 <img width="450" alt="checkout_develop.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d2564a3b-ab4f-32a3-edb4-5dffb38c7f89.png">
 
-この場合、`develop`ブランチは全く進んでいないので、`feature`ブランチを`merge`すると、単にコミットを前に進めるだけになります。
-この時、`develop`ブランチと`feature`ブランチは同じコミットを共有することになります。
+In this case, the `develop` branch has not progressed at all, so to `merge` the `feature` branch will simply move the commit forward.
+In this case, the `develop` and `feature` branches share the same commit.
 
 <img width="450" alt="merge_feature_no_conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/95d4195d-a9a5-1fec-710e-85887c2f7f1f.png">
 
-<a id="markdown-ノーファストフォワード" name="ノーファストフォワード"></a>
-### ノーファストフォワード
-もし、`develop`ブランチがコミットやマージによって、新しいコミットに進んでいたらどうなるでしょうか？
-これを`no fast-forward`な状態と言います。
+<a id="markdown-no-fast-forward" name="no-fast-forward"></a>
+### No Fast Forward
+What if the `develop` branch has progressed to a new commit by commit or merge?
+This is called a `no fast-forward` situation.
 
-`develop`ブランチでは、`first.txt`を変更を行なって`commit`まで終えました。
-そのため、`develop`ブランチと'`feature`ブランチは、完全に枝分かれてしまいました。
+In the `develop` branch, you have made changes to `first.txt` and have finished `commit`.
+So the `develop` branch and the `feature` branch are completely split.
 
 <img width="450" alt="develop_commi.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d97a8652-dd94-2835-4cf2-94eed01e6353.png">
 
-
-`develop`ブランチから、`feature`ブランチを`merge`しようとすると、Gitは変更履歴同士を確認します。
-もしお互いに競合しあう編集をしていない場合は、すぐに`merge commit`が作成されます。
-これを`Automatic merge`と呼ばれます。
+If you try to `merge` a `feature` branch from a `develop` branch, Git will check your changelog against each other.
+If there are no conflicting edits, a `merge commit` is created immediately.
+This is called an `automatic merge`.
 
 <img width="450" alt="merge_feature_auto.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a81e9577-6aec-e565-71bf-0836fd883974.png">
 
-<a id="markdown-コンフリクトに対処する" name="コンフリクトに対処する"></a>
-### コンフリクトに対処する
+<a id="markdown-deal-with-conflicts" name="deal-with-conflicts"></a>
+### Deal with Conflicts
+In the `no fast-forward` state, the differences in work content. is called `conflict`.
+In this case, we must manually fix the `conflict` content and `commit`.
 
-`no fast-forward`状態で、作業内容が競合していることを`conflict`と言います。
-この場合は、手動で`conflict`をしている内容を修正し、`commit`を行います。
-
-
-`develop`ブランチでは、以下のような`third.txt`が作成され、`commit`されています。
-
+In the `develop` branch, we created the following `third.txt` and `committed`.
 
 ```text third.txt
 Hello, World! I'm nope, from USA.
@@ -377,322 +367,321 @@ I like dancing on house music.
 ```
 <br>
 
-`develop`ブランチでは、`I'm nope, from USA`と書いてあり、
-`feature`ブランチでは、`I'm noshishi, from Japan`と書いてあります。
-1行目の内容が競合している状態です。
+In the `develop` branch, `I'm nope, from USA`.
+In the `feature` branch, `I'm noshishi, from Japan`.
+The content of the first line is in conflict.
 
-この時に`merge`を行うと、`conflict`が起こります。
-Gitが`conflict`を解決してから`commit`してくれと指示が出てきます。
+If you do a `merge` at this time, a `conflict` will occur.
+Git will ask you to `commit` after resolving the `conflict`.
 
 <img width="450" alt="conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/794285e4-077a-17b1-4743-0e1f2685fba7.png">
 
-
 <br>
-（作業場所は`develop`ブランチ）
 
-指示通りに`third.txt`を見てみると、以下のような追記がされています。
+(The branch we work on is the `develop` branch)
+
+If you look at `third.txt` as instructed, you will see the following additions
 
 ```text third.txt　（conflict後）
-<<<<<<< HEAD
+ <<<<<<<< HEAD
+ Hello, World! I'm noshishi, from Japan.
+ =======
+ Hello, World! I'm nope, from USA.
+ >>>>>>>> feature
+ I like dancing on house music.
+```
+
+The upper `HEAD`, separated by `=======`, represents the contents of the `develop` branch.
+The lower side represents the `feature` branch.
+
+You first considered which one to adopt, and decided to adopt the changes made in the `feature` branch this time.
+The only operation then is to edit `third.txt` by hand (delete unnecessary parts).
+
+```text third.txt　(After editing)
 Hello, World! I'm noshishi, from Japan.
-=======
-Hello, World! I'm nope, from USA.
->>>>>>> feature
 I like dancing on house music.
 ```
 
-`=======`で区切られた上側の`HEAD`が`develop`ブランチの内容を表しています。
-下側が`feature`ブランチを表しています。
+And the next thing you do is `add` and `commit`.
+The `conflict` is resolved and a new `merge commit` is created.
 
-まずどちらを採用するかを考え、今回は`feature`ブランチでの変更内容を採用することにしました。
-その時の作業は、`third.txt`を手作業で編集（不要な部分を削除）するだけです。
-
-```text third.txt　(編集後)
-Hello, World! I'm noshishi, from Japan.
-I like dancing on house music.
-```
-
-そして次に行うのが、`add`して`commit`です。
-`conflict`が解消され、新しい`merge commit`が作成されます。
 
 <img width="450" alt="hand_merge.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/5a20b54e-33bd-a973-e201-8bbdaba8c0cc.png">
 
-初心者が恐怖のコンフリクトですが、これを覚えればもう怖くありません。
+Conflicts are feared by beginners, but once you learn this, you will no longer be afraid.
 
 
 **(info)**
 
-`merge`を行なって`conflict`を解消したらなぜもう一度`merge`しないのでしょうか？と疑問に思うと思います。
-`merge`を一度実行した時点で`develop`ブランチは`merge`状態に入り、ブランチ同士の比較し`conflict`がなければ、新しいファイルを自動で`add`,`commit`を行なってくれています。
-なので、`conflict`を解消した後に、**特別に`commit`しているのではない**ということです。
-だからこそ`merge commit`と呼ばれるわけです。
+If you `merge` and resolve the `conflict`, why not `merge` again?
+When you `merge` once, the `develop` branch enters the `merge` state, and if there are no `conflicts`, the new files are automatically `added` and `commit`.
+So it is not a special `commit` after `conflict` is resolved.
+That's why it's called `merge commit`.
 
+<a id="markdown-delete-unnecessary-branches" name="delete-unnecessary-branches"></a>
+### Delete unnecessary branches
+The merged branch is basically useless, so we will delete it.
+If we leave a branch alone, you can move from the branch you want to delete to another branch and `git branch -d <branch>`.
+You may think the commits on that branch are deleted.
+In fact, the commits are carried over to the merged branch.
+You can use `git log` to see all the commits you've made on the branch and the commits on the merged branch.
 
-<a id="markdown-不要なブランチは削除する" name="不要なブランチは削除する"></a>
-### 不要なブランチは削除する
-統合されたブランチは、基本お役御免なので、削除していきます。
-ブランチを放置しておくと、削除したいブランチから他のブランチに移動して、`git branch -d <branch>`すればおさらばです。
-ちなみに、削除されたらそのブランチのコミットは無くなるのかというとそうではありません。
-マージしたブランチにしっかりと引き継がれています。
-`git log`を使用すると、ブランチ内で行なったすべてのコミットおよびマージしたブランチのコミットを閲覧できます。
+<a id="markdown-what-is-the-branch" name="what-is-the-branch"></a>
+### (Aside) What is the brunch
+We said that a branch is a pointer to a commit, but it also holds another important data.
+It is all the commits that have been made on that branch.
 
-<a id="markdown-ブランチの正体を知りたい" name="ブランチの正体を知りたい"></a>
-### (余談)ブランチの正体を知りたい
-ブランチは、コミットを指すポインタと言いましたが、もうひとつ重要なデータを保持しています。
-それは、そのブランチで行ってきたすべてのコミットです。
-つまり、ブランチは、コミットの集合体であり、なおかつその中で最新のコミットを指すポインタを持っているということです。
+A branch is a collection of commits, and it has a pointer to the latest commit in that collection. (Strictly speaking, the commit can trace back to previous commits.)
 
-図で表すと以下の通りです。
+The following diagram illustrates this.
 
 <img width="450" alt="branch_image.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/8cbb8c69-d048-778c-9d2d-db1f3be3b3be.png">
 
-だから、Git Flowの様に横軸でブランチを考えることができるんです。
-ちなみに、上の図を横軸にブランチを置いて書いてみるとこうなります。
+So we can think of branches on a horizontal axis like Git Flow.
+By the way, if you draw the above diagram with branches on the horizontal axis, it looks like this.
 
 <img width="450" alt="branch_image2.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/97ed7459-a4ee-afd9-1e2e-d7a0ffbf8f1e.png">
 
-<a id="markdown-まとめ" name="まとめ"></a>
-### まとめ
+<a id="markdown-summary3" name="summary3"></a>
+### Summary
 `fast-forward merge`
+
 ![fast_merge.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/4abed1f6-7431-50d5-b90a-58e152633096.gif)
 
 `no fast-forward merge`
+
 ![nofast_merge1.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3a29143b-fe53-3df7-352c-ccd569373685.gif)
 
 `no fast-forward merge with conflict`
+
 ![nofast_merge2.gif](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/2898da3a-dc15-e1fd-c991-61d80ca0f6a1.gif)
 
 
 **(info)**
 
-`merge`:特定のブランチ(`main`や`develop`など)に、作業用のブランチ（`feature`など）を統合（吸収）し、新しいコミットを作成すること。
+`merge`: To integrate (absorb) a working branch (such as `feature`) into a specific branch (such as `main` or `develop`) and create a new commit.
 
 
-<a id="markdown-リベース" name="リベース"></a>
-## リベース
-各ブランチの派生元のコミットを変えてブランチ同士を統合することを`rebase`と言います。
-`merge`に似ていますが、異なる点は、作業を行うブランチが 「派生先」ブランチということです。
+<a id="markdown-rebase" name="rebase"></a>
+## Rebase
+`Rebase` is the process of merging branches by changing the commit from which the branch is derived.
+It is similar to `merge`, except that the branch you are working on is the destination branch.
 
-`develop`ブランチと`feature`ブランチで作業していているとしましょう。
+Suppose you are working on the `develop` and `feature` branches.
 
 <img width="450" alt="base_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/0655a75b-4466-a069-0ad7-f98a2785996c.png">
 
-<a id="markdown-ブランチごとごっそり移動させる" name="ブランチごとごっそり移動させる"></a>
-### ブランチごとごっそり移動させる
-`develop`ブランチの現在のコミット、`feature`ブランチに反映させるためには、`feature`ブランチが派生した`gp55sw`コミットから`3x7oit`コミットに移動させる必要があります。
+<a id="markdown-move-branch" name="move-branch"></a>
+### Move the branch
+You may think to reflect the current commit on `develop` branch into `feature` branch.
+You need to move `feature` branch from the `gp55sw` commit to the `3x7oit` commit.
 
-これは`feature`ブランチから`git rebase develop`とすることで一気に移動できます。
+This can be moved at once from the `feature` branch by doing a `git rebase develop`.
+
 
 <img width="450" alt="move_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/acecd79a-66eb-1836-f911-a76b2ad3dbef.png">
 
-
-`merge`をしているというより、`develop`ブランチの最新のコミットから`feature`ブランチを生やし直すに近いです。
-ただし、コミットごと移動し、新しいコミットを行うことが違いです。
+This process is more like re-growing the `feature` branch from the latest commit on the `develop` branch than doing a `merge`.
+The difference is that you move the entire commit and make a new commit.
 
 <img width="450" alt="rebase_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d37b85ab-7b78-8a68-3302-6081edc036b1.png">
 
-なぜ、こんな移動（統合）をするのかというと、一つは　`fast-forward`になりいつでも`merge`を行いやすいことです。
-もう一つは、コミットが一直線になることで容易にコミット履歴を辿れ、ファイルの更新順に整合性を持たせることができるためです。
+One reason for such a move is that it is `fast-forward` and easy to `merge` at any time.
+The other reason is that the commits are aligned so that the commit history can be easily traced and the order in which files are updated is consistent.
 
-<a id="markdown-リベースのコンフリクトに対処する" name="リベースのコンフリクトに対処する"></a>
-### リベースのコンフリクトに対処する
-もちろん`rebase`にも`conflict`が存在します。
-上記の場合、`feature`ブランチでは、`fourth.txt`を追加しましたが、その後`develop`ブランチでのコミットでは、`fourth.txt`に関わる変更がないため、`conflict`は起こりません。
+<a id="markdown-deal-with-rebase-conflicts" name="deal-with-rebase-conflicts"></a>
+### Deal with rebase conflicts
+Of course there is also a `conflict` in `rebase`.
+You added `fourth.txt` in the `feature` branch, but you didn't change `fourth.txt` in the `develop` branch.
+There is `conflict`.
 
-ですが、以下のように変更内容が被っていた場合、`conflict`が起こります。
+However, if the following changes are covered by each other, `conflict` will occur.
 
 <img width="450" alt="rebase_conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/c04e5c00-7523-ccfd-9311-421fe252fdc0.png">
 
-でも`merge`と同じように対処すれば大丈夫です。
-ただし、差分を確認してファイルの編集を終えたら、`git rebase --continue`で作業を終わりましょう。
-`commit`しなくても自動でコミットしてくれます。
-
+You can just deal with it the same way you would with `merge`.
+However, After you have checked the diff and finished editing the file, you should finish your work with `git rebase --continue`.
+You don't have to `commit`, it will commit automatically.
 
 **(info)**
 
-`rebase`:ブランチの派生元であるコミットを移動させて新しいコミットを行うこと。
+`rebase`: Move the commit from which the derived branch to a new commit.
 
+<a id="markdown-keep-up-to-date" name="keep-up-to-date"></a>
+## Keep local repositories up-to-date
+After some local work, you may be faced with a situation where the remote repository has been updated by another developer.
+In this case, you can use `pull` to re-install the information from the remote repository back into the local repository.
 
-<a id="markdown-ローカルリポジトリを最新にする" name="ローカルリポジトリを最新にする"></a>
-## ローカルリポジトリを最新にする
-ローカルである程度作業を進めると、リモートリポジトリが他の開発者によって更新されている場合があります。
-この場合において、リモートリポジトリの情報を再度ローカルリポジトリに反映させるために行うのが`pull`です。
-
-<a id="markdown-ブランチとリポジトリ" name="ブランチとリポジトリ"></a>
-### ブランチとリポジトリ
-ブランチは、各リポジトリに保存されています。
-実際に作業を行うブランチです。
+<a id="markdown-branch-and-repository" name="branch-and-repository"></a>
+### Branch and Repository
+Branches are stored in each repository.
+This is the branch where the actual work is done.
 
 <img width="450" alt="brancha.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/76f507a4-232e-894e-e01f-328ab7138577.png">
 
-一方で、ローカルリポジトリには、リモートリポジトリをコピーしたブランチがあります。
-これは「リモート追跡ブランチ」と呼ばれます。
-`remotes/<remote branch>`でリモートのブランチと紐づく名前のブランチです。
+On the other hand, the local repository has the copied branches of the remote repository.
+This is called a "remote tracking branch".
+It is a branch with a name that is tied to the remote branch in `remotes/<remote branch>`.
 
-これは、あくまでもリモートリポジトリを監視しているに過ぎません。
+This is only monitoring the remote repository.
 
 <img width="450" alt="remotes.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/9c014980-79e5-bba6-c3d8-c8f6a237178d.png">
 
-
-<a id="markdown-最新の状況を確認する" name="最新の状況を確認する"></a>
-### 最新の状況を確認する
-リモートリポジトリの`develop`ブランチがリモート追跡ブランチより一つ進んでいる状況だったとします。。
+<a id="markdown-check-the-latest-status" name="check-the-latest-status"></a>
+### Check the latest status
+Suppose you have a situation where the `develop` branch in the remote repository is one step ahead of the remote tracking branch.
 
 <img width="450" alt="pull_notupdate.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3393d6c6-1a65-31c7-7afb-f98170f79872.png">
 
-リモートリポジトリのブランチの最新の状況をリモート追跡ブランチに反映させることを`fetch`と言います。
+Reflecting the latest status of a branch in a remote repository on a remote tracking branch is called `fetch`.
 
 <img width="450" alt="fetch_update.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/ff486c7c-963d-5962-0878-a144aab5893f.png">
 
 
-<a id="markdown-最新の状態に更新する" name="最新の状態に更新する"></a>
-### 最新の状態に更新する
-もう少し踏み込んで、ローカルブランチにも反映させたい場合、`pull`を行います。
-`pull`するとまず、ローカルのリモート追跡ブランチが更新されます。
-その後にローカルブランチに`merge`を行います。
+<a id="markdown-update-to-the-status" name="update-to-the-status"></a>
+### Update to the latest status
+If you want to have it reflected in your local branch, you can do a `pull`.
+When you `pull`, the local remote tracking branch is updated first.
+Then `merge` to the local branch.
 
 <img width="450" alt="pull_update.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a9526959-34d0-20fd-d128-4b5b37f19298.png">
 
+This time, there was a commit that went one branch ahead of the `develop` branch, so you created a new commit by `merge` into the local `develop` branch.
 
-今回は、`develop`ブランチの一つ先に進んだコミットがあったので、ローカルブランチの`develop`ブランチに`merge`して新たなコミットが作成されました。
-
-<a id="markdown-プルのコンフリクトに対処する" name="プルのコンフリクトに対処する"></a>
-### プルのコンフリクトに対処する
-リモートリポジトリのコミットで行われた変更と、ローカルリポジトリのコミットで行った変更が競合してしまった時、`pull`したときにリモート追跡ブランチとローカルブランチで`conflict`が起こります。下記の場合、`remotes/develop`と`develop`ブランチが競合しています。
+<a id="markdown-deal-with-pull-conflicts" name="deal-with-pull-conflicts"></a>
+### Deal with pull conflicts
+When a remote repository commit conflict with a local repository commit, you face the `conflict` between the remote tracking branch and the local branch when you `pull`.
+In the following case, the `remotes/develop` and `develop` branches are in conflict.
 
 <img width="450" alt="pull_conflict.png" src="">
 
-`push`は、`fetch`と`merge`なので、`merge`の`conflict`と同じ対処方法で解決できます。
-今回は`develop`が`remotes/develop`を`merge`するので、作業ブランチは`develop`です。
-原因のフォルダを開いて、修正したら`commit`を行いましょう。
+Since `push` is `fetch` and `merge`, you can solve in the same way as `conflict` in `merge`.
+This time, `develop` `merges` `remotes/develop`, so the working branch is `develop`.
+Open the folder that caused the problem and `commit` when you have fixed it.
 
-
-<a id="markdown-プルリクエストの正体" name="プルリクエストの正体"></a>
-### (余談)プルリクエストの正体
-基本的にリモートとローカルの関係は、リモートリポジトリからローカルリポジトリに`pull`し、ローカルリポジトリからリモートリポジトリに`push`することになります。
-ですが、GitHubをはじめとするサービスには、ローカルリポジトリからリモートリポジトリに`pull`するという仕組みをとっています。
-というのは、開発者の個人の判断`main`ブランチなどに`push`して、リモートリポジトリを更新してしまうと誰もチェックできずに大きな障害が発生する可能性があります。
-一旦上位の開発者がコードをレビューするプロセスを挟むのが`pull request`です。
+<a id="markdown-identity-of-pull-requests" name="identity-of-pull-requests"></a>
+### (Aside) Identity of pull requests
+Basically, the relationship between remote and local is pull from the remote repository to the local repository and push from the local repository to the remote repository.
+However, GitHub and other services have a mechanism to send a request before merge from a branch in a remote repository to a branch such as main.
+This is because if a developer pushes to the main branch and updates the remote repository, no one can check it and a major failure may occur.
+`Pull request` is to insert a process where a higher level developer reviews the code once.
 
 <img width="450" alt="pull_request.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/49ceb654-292c-0b89-f537-1a771be1a7cd.png">
 
 **(info)**
 
-`pull`:`fetch` + `merge`。`pull`は、リモートリポジトリの状態をローカルリポジトリに反映させること。
+`pull`: `fetch` + `merge`. `pull` is to reflect the state of the remote repository in the local repository.
 
+<a id="markdown-useful-functions" name="useful-functions"></a>
+## Useful Functions
 
-<a id="markdown-便利な機能" name="便利な機能"></a>
-## 便利な機能
+<a id="markdown-correct-the-commit" name="correct-the-commit"></a>
+### Correct the commit
+To `commit` to correct a previous commit is called `revert`.
+For example, suppose you added `second.txt` to your local repository with `m9sgLe`.
 
-<a id="markdown-リバート" name="リバート"></a>
-### リバート
-前回行ったコミットを訂正するための`commit`することを`revert`と言います。
-例えば`m9sgLe`で`second.txt`をローカルリポジトリに追加したとしましょう。
-
-`revert`を行うと、その`commit`が取り消されて`second.txt`はローカルリポジトリから無くなります。
+When you `revert`, the commit is revoked and `second.txt` is no longer in the local repository.
 
 <img width="450" alt="revert.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/255417d6-a05f-b68c-89eb-436ec1b92c7c.png">
 
-`revert`の良さは、`commit`を残せることです。後ほど紹介する`reset`と区別しましょう。
+The merit of `revert` is that it allows you to leave `commit`. 
+Distinguish this from `reset`, which will be introduced later.
 
+<a id="markdown-delete-the-commit" name="delete-the-commit"></a>
+### Delete the commit
+To undo the current latest commit and work on it again is called `reset`.
 
-<a id="markdown-スタッシュ" name="スタッシュ"></a>
-### スタッシュ
-変更ファイルがあると他のブランチに移動できないので、`commit`までするか変更を破棄してしまうかを選択しなければなりません。
-そんな時に活躍するのが`stash`です。
-ワーキングディレクトリやステージングエリアにあるファイルを一時避難させることができます。
+The `--soft` option allows you to go back to the stage immediately after `add`.
+The `--mixed` option allows you to go back to the stage where you were working in the working directory.
+The `--hard <commit>` option removes all commits up to the commit point you are returning to and moves `head` to the specified commit.
 
-<img width="450" alt="stash.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a8e83f88-bce5-560b-d496-80bea2918a65.png">
-
-他のブランチに移動したい時、`stash`し、帰ってきたら`stash pop`で避難したファイルを取り戻して作業を再開します。
-
-
-<a id="markdown-チェリーピック" name="チェリーピック"></a>
-### チェリーピック
-任意のコミットを現在のブランチに持ってきてコミットを作ることを`cherry-pick`と言います。
-まさにいいとこ取りのような機能です。
-
-<img width="450" alt="cherry.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/27601d74-62c8-2814-dfc6-3e31e6abf246.png">
-
-
-以前に`feature`ブランチで実装した**〇〇〇な機能だけ**持ってきて、現在`develop`ブランチの作業に使用したいときなどに使用します。
-
-<a id="markdown-HEADを使いこなす" name="HEADを使いこなす"></a>
-### HEADを使いこなす
-HEADは、現在作業中のブランチのポインタと説明しました。
-また、ブランチはコミットを指すポインタだ、とも説明しました。
-
-下の図を見てください。
-
-<img width="450" alt="head.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b4c0651f-a613-f858-9f53-7bf9de227f5d.png">
-
-HEADが指すものは`develop`ブランチ、`develop`ブランチが指すもの`eaPk76`というコミットです。
-つまり、この状況でのHEADは、`eaPk76`のコミットを指しているということになります。
-
-よくGitのドキュメントや記事などに、コマンドの後ろに`HEAD`を使うのを見たことがありませんか？
-例えば、`git revert HEAD`など。
-これは、`HEAD`をコミットと置き換えることができるから実現できるコマンドなのです。
-
-<a id="markdown-リセット" name="リセット"></a>
-### (おまけ)リセット
-現在の最新のコミットを取り消してもう一度作業することを`reset`といいます。
-
-`--soft`オプションを使用すると`add`した直後に戻ることができます。
-`--mixed`オプションを使用すると、ワーキングディレクトリで作業していた段階に戻ることができます。
-`--hard <commit>`オプションを使用すると、戻るコミット地点までのすべてのコミットを削除し、指定コミットに`HEAD`を移動させます。
 
 <img width="450" alt="reset.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/6d4a7eee-ce0a-4af5-ef0f-5541cb6b66b2.png">
 
+Since `reset` **completely deletes** the commit, it is recommended that you do not use it unless you have a good reason, especially for the '--hard' option.
 
-`reset`は**完全にコミットが削除**されるので、特に'--hard'オプションについては、余程のことがなければ使用しないことを推奨します。
+If you want to get your commits back, you can use `git reflog` to see the commits you have deleted.
 
-<a id="markdown-終わりに" name="終わりに"></a>
-## 終わりに
+<a id="markdown-evacuate-the-work" name="evacuate-the-work"></a>
+### Evacuate the work
+Since you can't move to another branch if there are change files, you have to choose between going to `commit` or discarding your changes.
+This is where `stash` comes in handy.
+You can temporarily evacuate files in the working directory or staging area.
 
-<a id="markdown-Git以外のソースコードの管理" name="Git以外のソースコードの管理"></a>
-### Git以外のソースコードの管理
-Gitと同じ歴史を持ったMercurialというサービスがあります。
-特徴は、Gitのような柔軟性を犠牲に非常にシンプルなコマンドラインインターフェース(CLI)を採用していることです。
-最近だと、このMercurialをベースにMeta社がSaplingという新しいソースコード管理システムをオープンソースで公開されましたね。
-また今度、ちょっと触ってみて感想を書いてみたいなと思います。
+<img width="450" alt="stash.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a8e83f88-bce5-560b-d496-80bea2918a65.png">
 
-<a id="markdown-リモートリポジトリの居場所" name="リモートリポジトリの居場所"></a>
-### リモートリポジトリの居場所
-リモートリポジトリ用のサーバーを貸してくれるサービスをホスティングサービスと言います。
-代表的なものであれば、GitHub, Bitbucket、プライベートに使用するAws Code Commitなどがあります。
-GitとGit Hubは、全く別物です。
-ちなみに、上で書いた通り、リモートリポジトリ用のサーバーは自分達のサーバーでも大丈夫です。
+When you want to move to another branch, `stash` and when you return, use `stash pop` to retrieve the evacuated files and resume work.
 
-<a id="markdown-ポインタ" name="ポインタ"></a>
-### ポインタ
-C言語のようなメモリを直接扱うプログラミングに触れたことがある方は、なんとなく「ポインタ」の意味がわかると思います。
-一方で、初学者の方にとって、すごく曖昧なものに感じると思います。
+<a id="markdown-bring-the-commit" name="bring-the-commit"></a>
+### Bring the commit
+Bringing any commit to the current branch to create a commit is called `cherry-pick`.
+It is a very nice feature.
 
-コミットオブジェクトは、リポジトリ内に保存されていると言いました。
-リポジトリ内に、たくさんのコミットオブジェクトが溢れていたら、どのように欲しいオブジェクトを選ぶことができるでしょうか。
+<img width="450" alt="cherry.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/27601d74-62c8-2814-dfc6-3e31e6abf246.png">
 
-それは、特定のコミットオブジェクトありかを突き止めるラベル(住所)が必要になります。
+This is used when you want to bring back **only** features previously implemented in a `feature` branch and use them for work in the current `develop` branch, for example.
+
+<a id="markdown-mastering-head" name="mastering-head"></a>
+### Mastering HEAD
+I explained that HEAD is a pointer to the branch you are currently working on.
+I also explained that a branch is a pointer to a commit.
+
+See the figure below.
+
+<img width="450" alt="head.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b4c0651f-a613-f858-9f53-7bf9de227f5d.png">
+
+HEAD points to the `develop` branch, and the `develop` branch points to the commit `eaPk76`.
+So, HEAD in this situation refers to the commit `eaPk76`.
+
+Have you often seen Git documentation or articles that use `HEAD` after a command?
+For example, `git revert HEAD`.
+This is a command that can be achieved because you can replace `HEAD` with commit.
+
+<a id="markdown-end" name="end"></a>
+## End
+
+<a id="markdown-source-code-managemaent-without-git" name="source-code-managemaent-without-git"></a>
+### Source code management without Git
+Mercurial has the same history as Git.
+Mercurial has a very simple command line interface (CLI) that sacrifices the flexibility of Git.
+Recently, based on Mercurial, Meta released a new source code management system called Sapling as open source.
+I would like to try it again and write about my impressions.
+
+<a id="markdown-where-is-the-remote-repository" name="where-is-the-remote-repository"></a>
+### Where is the remote repository
+A hosting service is a service that rents a server for a remote repository.
+Typical examples are GitHub, Bitbucket, and Aws Code Commit for private use.
+Git and Git Hub are completely different.
+By the way, as mentioned above, we can use our own servers for remote repositories.
+
+<a id="markdown-pointer" name="pointer"></a>
+### Pointer
+If you have been exposed to programming that deals directly with memory, such as the C programming language, you will somehow know what a "pointer" is.
+On the other hand, for a beginning programmer, it seems very vague.
+
+I said that commit objects are stored in the repository.
+If there are many commit objects in the repository, how can you select the one you want?
+
+We need a label (address) to locate a particular commit object.
 
 <img width="600" alt="pointer.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/1d4f5378-f935-7703-b5bb-93ac76b73b28.png">
 
+The "pointer" is a valuable data that indicates us to the label so that we don't forget it.
 
-「ポインタ」は、そのラベルを忘れないように指差してくれる貴重なデータというわけです。
+The label, by the way, is converted into a mysterious string through a `hash function`.
+If you are curious, please refer to [How does Git compute file hashes?](https://stackoverflow.com/questions/7225313/how-does-git-compute-file-hashes).
 
-ちなみにラベルは、ハッシュ関数と呼ばれる関数を通じて不思議な文字列へと変換されたものを使います。
-気になる方は、[Gitのハッシュ値の求め方](https://engineering.mercari.com/blog/entry/2016-02-08-173000/)を参考にしてください。
+<a id="markdown-to-further-understading-git" name="to-further-understading-git"></a>
+### To further understand Git
+There are many things I failed to mention in this article.
 
-<a id="markdown-さらにGitを理解するために" name="さらにGitを理解するために"></a>
-### さらにGitを理解するために
-この記事で言及できなかったことがたくさんあります。
-Gitのコアの部分はシンプルなキー・バリュー型データストアであることや、バリューとなるGitオブジェクトの詳細、そしてオブジェクトをどのように扱うかなど。
-いつか完全攻略したいと思います。
+- The core of Git is a simple key-value type data store
+- Details of the Git object that is the value
+- How to relate with each objects.
+I hope to fully explore this someday.
 
-
-<a id="markdown-参考サイト" name="参考サイト"></a>
-# 参考サイト
+<a id="markdown-references" name="references"></a>
+## References
 - [Git Documentation](https://git-scm.com/doc)
 - [Learn git concepts, not commands](https://dev.to/unseenwizzard/learn-git-concepts-not-commands-4gjc)
 - [図解 Git](https://marklodato.github.io/visual-git-guide/index-ja.html)
-- [いまさらだけどGitを基本から分かりやすくまとめてみた](https://qiita.com/gold-kou/items/7f6a3b46e2781b0dd4a0)
-- [git add ってなんのためにやるの？](https://kray.jp/blog/expound-git-add/)
-
