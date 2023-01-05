@@ -68,7 +68,7 @@ The system also allows **multiple developers to edit files at once**, so the wor
 First, make a copy of the file or other files in a storage location that can be shared by everyone (from now on referred to as "remote repository") on your computer (from now on referred to as "local repository"), and then add or edit new code or files.
 Then, the files will be updated by registering them from the local repository to the remote repository.
 
-<img width="600" alt="retool.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/22c6b2e3-aeda-44c6-8f54-3b7e80db129b.png">
+<img width="600" alt="retool.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/git_workflow.png">
 
 
 <a id="markdown-understading-by-image" name="understading-by-image"></a>
@@ -101,7 +101,7 @@ For example, your home directory is fine, or any directory you normally use.
 Next, copy and bring the files from the remote repository.
 This is called `clone`.
 
-<img width="450" alt="clone.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/36772bce-9111-1f50-bafd-97246035e78e.png">
+<img width="450" alt="clone.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/clone.png">
 
 The remote repository called `project` contains only `first.txt`, and this is the image when you `clone` the remote repository.
 
@@ -116,7 +116,7 @@ This is called `initialize` and allows you to convert a directory you are alread
 A working directory is not any special directory, but a directory where you always work on your computer.
 It's easier to understand if you think of it as a directory where you can connect to the target directory that Git manages (in this case, `project`) with a Git staging area or local repository.
 
-<img width="400" alt="clone3.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/162c1db8-8271-fd4e-f702-2f77a0329564.png">
+<img width="400" alt="clone3.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/working_directory.png">
 
 <a id="markdown-change-and-add-file" name="change-and-add-file"></a>
 ### Change and Add file
@@ -125,7 +125,7 @@ Actually, in the working directory, we work.
 
 Let's create a new file called `second.txt`.
 
-<img width="450" alt="create_file.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/8361cfea-fca9-3193-835b-e31b449df6b8.png">
+<img width="450" alt="create_file.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/new_file.png">
 
 Next, move the modified file to the staging area.
 This is called `add`.
@@ -133,7 +133,7 @@ This is called `add`.
 It is a feature of Git that there is a cushion before changes are reflected in the local repository.
 I will explain why this cushion exists in more detail later.
 
-<img width="450" alt="add.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/e975ecbf-c65f-f9ab-6dec-75984de363d6.png">
+<img width="450" alt="add.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/add.png">
 
 Then, we registere the content in the staging area to the local repository.
 This is called `commit`.
@@ -141,7 +141,7 @@ This is called `commit`.
 By the way, we can comment when you `commit`.
 In this case, we added a file, so write `git commit -m 'add second.txt'`.
 
-<img width="450" alt="commit.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/f8908fd7-72b1-51d7-4aa6-c742b56a4fac.png">
+<img width="450" alt="commit.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/commit.png">
 
 
 **(info)**
@@ -158,7 +158,7 @@ Then, the work is done!
 The last step is to reflect the changes in the local repository to the remote repository.
 This is called `push`.
 
-<img width="400" alt="push.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d57789fe-08f2-3234-ec5a-bf1457a6cb6d.png">
+<img width="400" alt="push.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/push.png">
 
 It may be easier to understand if you think of it as a commit to a remote repository.
 
@@ -182,7 +182,7 @@ In this case, when parsing the commits, you may not know where a feature was imp
 In Git, it is recommended to do one `commit` per feature.
 This is why there is a staging area where you can subdivide the `commit` unit into smaller units.
 
-<img width="400" alt="push.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/5b25c70d-baf5-0913-d220-f60aedf583ea.png">
+<img width="400" alt="staging_area.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/staging_area.png">
 
 
 The concept of Git is to stage only what is needed, and then proceed with the work or `commit` ahead of time to promote efficient development that can be traced back through the history of each implementation.
@@ -217,7 +217,7 @@ The former just create a branch, the latter create a branch and moves you to tha
 (Branches are maintained in the repository.)
 
 
-<img width="450" alt="cretae_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a7f499f9-bf5e-0c58-1a35-59cd3e2a4c30.png">
+<img width="450" alt="cretae_branch.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/branch.png">
 
 The key point when generating branches is **which branch to derive from**.
 We can specify the source as `git checkout -b <new branch> <from branch>`.
@@ -235,14 +235,14 @@ Moving the branch is called `checking out`.
 The pointer to the branch you are currently working on is called `HEAD`.
 So, moving from the `main` branch to the `develop` branch means changing the `HEAD`.
 
-<img width="450" alt="checkout_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3a7379b1-7a1c-35ba-02be-619d13a192ad.png">
+<img width="450" alt="checkout_branch.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/checkout.png">
 
 Now both branches point to the commit named `Atr3ul`.
 You just added `second.txt` by committing in the `main` branch, so you are ahead of the commit `f27baz`.
 From here, let's say you change `second.txt` in the `develop` branch and make a new commit.
 
 
-<img width="450" alt="in_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/1ae0aa22-4c8d-411b-b20e-c29047dcdb4d.png">
+<img width="450" alt="in_branch.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/commit_branch.png">
 
 
 Then, as shown in the figure, the `develop` branch created a commit called `m9sgle` and pointed to that commit.
@@ -268,7 +268,7 @@ Here are two simple ones. I think it's enough to know that there is such a thing
 The "Git Flow" is a fairly complex and intricate structure.
 I think it's a model of how Git should be used.
 
-<img width="450" alt="git_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a05bf11e-8ad0-e82f-e5f4-76498f4b5c46.png">
+<img width="450" alt="git_flow.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/git_flow.png">
 
 **Definition of each branch**.
 
@@ -288,7 +288,7 @@ When ready for release, merge to master and merge to develop.
 
 The "GitHub Flow" is a somewhat simplified model of the Git Flow.
 
-<img width="450" alt="github_flow.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b717c9a0-7612-906f-2f10-3bf7a600e755.png">
+<img width="450" alt="github_flow.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/github_flow.png">
 
 As you can see, it consists of only `master` and `feature`.
 The important difference is the cushion of `pull requests` (explained in the pull below), which allows integration between branches.
@@ -322,7 +322,7 @@ I like dancing on house music.
 Then We `add` and finished up to `commit`.  
 <br>
 
-<img width="450" alt="feature_commit.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3fbb3116-4439-7753-74ec-260b043777f3.png">
+<img width="450" alt="feature_commit.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/commit_on_feature_branch.png">
 
 
 <a id="markdown-fast-forward" name="fast-forward"></a>
@@ -331,12 +331,12 @@ When the `feature` branch points to the commit that can be traced back to the `d
 
 First, move to `develop` with `checkout`.
 
-<img width="450" alt="checkout_develop.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d2564a3b-ab4f-32a3-edb4-5dffb38c7f89.png">
+<img width="450" alt="checkout_develop.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/checkout_to_develop.png">
 
 In this case, the `develop` branch has not progressed at all, so to `merge` the `feature` branch will simply move the commit forward.
 In this case, the `develop` and `feature` branches share the same commit.
 
-<img width="450" alt="merge_feature_no_conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/95d4195d-a9a5-1fec-710e-85887c2f7f1f.png">
+<img width="450" alt="merge_feature_no_conflict.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/merge_fastforward.png">
 
 <a id="markdown-no-fast-forward" name="no-fast-forward"></a>
 ### No Fast Forward
@@ -346,13 +346,13 @@ This is called a `no fast-forward` situation.
 In the `develop` branch, you have made changes to `first.txt` and have finished `commit`.
 So the `develop` branch and the `feature` branch are completely split.
 
-<img width="450" alt="develop_commi.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d97a8652-dd94-2835-4cf2-94eed01e6353.png">
+<img width="450" alt="develop_commi.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/commit_feature_develop1.png">
 
 If you try to `merge` a `feature` branch from a `develop` branch, Git will check your changelog against each other.
 If there are no conflicting edits, a `merge commit` is created immediately.
 This is called an `automatic merge`.
 
-<img width="450" alt="merge_feature_auto.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a81e9577-6aec-e565-71bf-0836fd883974.png">
+<img width="450" alt="merge_feature_auto.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/merge_nofastforward.png">
 
 <a id="markdown-deal-with-conflicts" name="deal-with-conflicts"></a>
 ### Deal with Conflicts
@@ -374,7 +374,7 @@ The content of the first line is in conflict.
 If you do a `merge` at this time, a `conflict` will occur.
 Git will ask you to `commit` after resolving the `conflict`.
 
-<img width="450" alt="conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/794285e4-077a-17b1-4743-0e1f2685fba7.png">
+<img width="450" alt="conflict.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/commit_feature_develop2.png">
 
 <br>
 
@@ -406,7 +406,7 @@ And the next thing you do is `add` and `commit`.
 The `conflict` is resolved and a new `merge commit` is created.
 
 
-<img width="450" alt="hand_merge.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/5a20b54e-33bd-a973-e201-8bbdaba8c0cc.png">
+<img width="450" alt="hand_merge.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/resolve_merge_conflict.png">
 
 Conflicts are feared by beginners, but once you learn this, you will no longer be afraid.
 
@@ -435,12 +435,12 @@ A branch is a collection of commits, and it has a pointer to the latest commit i
 
 The following diagram illustrates this.
 
-<img width="450" alt="branch_image.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/8cbb8c69-d048-778c-9d2d-db1f3be3b3be.png">
+<img width="450" alt="branch_image.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/branch_data.png">
 
 So we can think of branches on a horizontal axis like Git Flow.
 By the way, if you draw the above diagram with branches on the horizontal axis, it looks like this.
 
-<img width="450" alt="branch_image2.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/97ed7459-a4ee-afd9-1e2e-d7a0ffbf8f1e.png">
+<img width="450" alt="branch_image2.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/branch_data2.png">
 
 <a id="markdown-summary3" name="summary3"></a>
 ### Summary
@@ -469,7 +469,7 @@ It is similar to `merge`, except that the branch you are working on is the desti
 
 Suppose you are working on the `develop` and `feature` branches.
 
-<img width="450" alt="base_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/0655a75b-4466-a069-0ad7-f98a2785996c.png">
+<img width="450" alt="base_branch.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/before_rebase.png">
 
 <a id="markdown-move-branch" name="move-branch"></a>
 ### Move the branch
@@ -479,12 +479,12 @@ You need to move `feature` branch from the `gp55sw` commit to the `3x7oit` commi
 This can be moved at once from the `feature` branch by doing a `git rebase develop`.
 
 
-<img width="450" alt="move_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/acecd79a-66eb-1836-f911-a76b2ad3dbef.png">
+<img width="450" alt="move_branch.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/aim_rebase.png">
 
 This process is more like re-growing the `feature` branch from the latest commit on the `develop` branch than doing a `merge`.
 The difference is that you move the entire commit and make a new commit.
 
-<img width="450" alt="rebase_branch.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/d37b85ab-7b78-8a68-3302-6081edc036b1.png">
+<img width="450" alt="rebase_branch.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/rebase.png">
 
 One reason for such a move is that it is `fast-forward` and easy to `merge` at any time.
 The other reason is that the commits are aligned so that the commit history can be easily traced and the order in which files are updated is consistent.
@@ -497,7 +497,7 @@ There is `conflict`.
 
 However, if the following changes are covered by each other, `conflict` will occur.
 
-<img width="450" alt="rebase_conflict.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/c04e5c00-7523-ccfd-9311-421fe252fdc0.png">
+<img width="450" alt="rebase_conflict.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/conflict_rebase.png">
 
 You can just deal with it the same way you would with `merge`.
 However, After you have checked the diff and finished editing the file, you should finish your work with `git rebase --continue`.
@@ -517,7 +517,7 @@ In this case, you can use `pull` to re-install the information from the remote r
 Branches are stored in each repository.
 This is the branch where the actual work is done.
 
-<img width="450" alt="brancha.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/76f507a4-232e-894e-e01f-328ab7138577.png">
+<img width="450" alt="brancha.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/branches.png">
 
 On the other hand, the local repository has the copied branches of the remote repository.
 This is called a "remote tracking branch".
@@ -525,17 +525,17 @@ It is a branch with a name that is tied to the remote branch in `remotes/<remote
 
 This is only monitoring the remote repository.
 
-<img width="450" alt="remotes.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/9c014980-79e5-bba6-c3d8-c8f6a237178d.png">
+<img width="450" alt="remotes.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/remote_tracking_branch.png">
 
 <a id="markdown-check-the-latest-status" name="check-the-latest-status"></a>
 ### Check the latest status
 Suppose you have a situation where the `develop` branch in the remote repository is one step ahead of the remote tracking branch.
 
-<img width="450" alt="pull_notupdate.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/3393d6c6-1a65-31c7-7afb-f98170f79872.png">
+<img width="450" alt="pull_notupdate.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/branch_local_remote.png">
 
 Reflecting the latest status of a branch in a remote repository on a remote tracking branch is called `fetch`.
 
-<img width="450" alt="fetch_update.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/ff486c7c-963d-5962-0878-a144aab5893f.png">
+<img width="450" alt="fetch_update.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/fetch.png">
 
 
 <a id="markdown-update-to-the-status" name="update-to-the-status"></a>
@@ -544,7 +544,7 @@ If you want to have it reflected in your local branch, you can do a `pull`.
 When you `pull`, the local remote tracking branch is updated first.
 Then `merge` to the local branch.
 
-<img width="450" alt="pull_update.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a9526959-34d0-20fd-d128-4b5b37f19298.png">
+<img width="450" alt="pull_update.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/pull.png">
 
 This time, there was a commit that went one branch ahead of the `develop` branch, so you created a new commit by `merge` into the local `develop` branch.
 
@@ -553,7 +553,7 @@ This time, there was a commit that went one branch ahead of the `develop` branch
 When a remote repository commit conflict with a local repository commit, you face the `conflict` between the remote tracking branch and the local branch when you `pull`.
 In the following case, the `remotes/develop` and `develop` branches are in conflict.
 
-<img width="450" alt="pull_conflict.png" src="">
+<img width="450" alt="pull_conflict.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/resolve_pull_conflict.png">
 
 Since `push` is `fetch` and `merge`, you can solve in the same way as `conflict` in `merge`.
 This time, `develop` `merges` `remotes/develop`, so the working branch is `develop`.
@@ -566,7 +566,7 @@ However, GitHub and other services have a mechanism to send a request before mer
 This is because if a developer pushes to the main branch and updates the remote repository, no one can check it and a major failure may occur.
 `Pull request` is to insert a process where a higher level developer reviews the code once.
 
-<img width="450" alt="pull_request.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/49ceb654-292c-0b89-f537-1a771be1a7cd.png">
+<img width="450" alt="pull_request.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/pull_request.png">
 
 **(info)**
 
@@ -582,7 +582,7 @@ For example, suppose you added `second.txt` to your local repository with `m9sgL
 
 When you `revert`, the commit is revoked and `second.txt` is no longer in the local repository.
 
-<img width="450" alt="revert.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/255417d6-a05f-b68c-89eb-436ec1b92c7c.png">
+<img width="450" alt="revert.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/revert.png">
 
 The merit of `revert` is that it allows you to leave `commit`. 
 Distinguish this from `reset`, which will be introduced later.
@@ -596,7 +596,7 @@ The `--mixed` option allows you to go back to the stage where you were working i
 The `--hard <commit>` option removes all commits up to the commit point you are returning to and moves `head` to the specified commit.
 
 
-<img width="450" alt="reset.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/6d4a7eee-ce0a-4af5-ef0f-5541cb6b66b2.png">
+<img width="450" alt="reset.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/reset.png">
 
 Since `reset` **completely deletes** the commit, it is recommended that you do not use it unless you have a good reason, especially for the '--hard' option.
 
@@ -608,7 +608,7 @@ Since you can't move to another branch if there are change files, you have to ch
 This is where `stash` comes in handy.
 You can temporarily evacuate files in the working directory or staging area.
 
-<img width="450" alt="stash.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/a8e83f88-bce5-560b-d496-80bea2918a65.png">
+<img width="450" alt="stash.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/stash.png">
 
 When you want to move to another branch, `stash` and when you return, use `stash pop` to retrieve the evacuated files and resume work.
 
@@ -617,7 +617,7 @@ When you want to move to another branch, `stash` and when you return, use `stash
 Bringing any commit to the current branch to create a commit is called `cherry-pick`.
 It is a very nice feature.
 
-<img width="450" alt="cherry.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/27601d74-62c8-2814-dfc6-3e31e6abf246.png">
+<img width="450" alt="cherry.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/cherry-picking.png">
 
 This is used when you want to bring back **only** features previously implemented in a `feature` branch and use them for work in the current `develop` branch, for example.
 
@@ -628,7 +628,7 @@ I also explained that a branch is a pointer to a commit.
 
 See the figure below.
 
-<img width="450" alt="head.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/b4c0651f-a613-f858-9f53-7bf9de227f5d.png">
+<img width="450" alt="head.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/head.png">
 
 HEAD points to the `develop` branch, and the `develop` branch points to the commit `eaPk76`.
 So, HEAD in this situation refers to the commit `eaPk76`.
@@ -664,7 +664,7 @@ If there are many commit objects in the repository, how can you select the one y
 
 We need a label (address) to locate a particular commit object.
 
-<img width="600" alt="pointer.png" src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/2918231/1d4f5378-f935-7703-b5bb-93ac76b73b28.png">
+<img width="600" alt="pointer.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/pointer.png">
 
 The "pointer" is a valuable data that indicates us to the label so that we don't forget it.
 
@@ -684,4 +684,3 @@ I hope to fully explore this someday.
 ## References
 - [Git Documentation](https://git-scm.com/doc)
 - [Learn git concepts, not commands](https://dev.to/unseenwizzard/learn-git-concepts-not-commands-4gjc)
-- [図解 Git](https://marklodato.github.io/visual-git-guide/index-ja.html)
