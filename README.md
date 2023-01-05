@@ -596,7 +596,7 @@ The `--mixed` option allows you to go back to the stage where you were working i
 The `--hard <commit>` option removes all commits up to the commit point you are returning to and moves `head` to the specified commit.
 
 
-<img width="450" alt="reset.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/reset.png">
+<img width="450" alt="reset.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/reset_hard.png">
 
 Since `reset` **completely deletes** the commit, it is recommended that you do not use it unless you have a good reason, especially for the '--hard' option.
 
