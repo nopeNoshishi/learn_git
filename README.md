@@ -617,7 +617,7 @@ When you want to move to another branch, `stash` and when you return, use `stash
 Bringing any commit to the current branch to create a commit is called `cherry-pick`.
 It is a very nice feature.
 
-<img width="450" alt="cherry.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/cherry-picking.png">
+<img width="450" alt="cherry.png" src="https://github.com/nopeNoshishi/learn_git/blob/master/picture/cherry_picking.png">
 
 This is used when you want to bring back **only** features previously implemented in a `feature` branch and use them for work in the current `develop` branch, for example.
 
