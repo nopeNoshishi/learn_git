@@ -5,7 +5,7 @@ Understanding git from its system structure makes git more fun. I have recently 
 
 <!-- TOC -->
 
-- [Whati is Git?](#what-is-git)
+- [What is Git?](#what-is-git)
 	- [Manage versions and Distribute work](#manage-distribute)
 	- [Using Git means](#using-git-means)
 	- [Understanding by image](#understading-by-image)
@@ -28,7 +28,7 @@ Understanding git from its system structure makes git more fun. I have recently 
 	- [No Fast Forward](#no-fast-forward)
 	- [Deal with Conflicts](#deal-with-conflicts)
 	- [Delete unnecessary branches](#delete-unnecessary-branches)
-	- [(aside) What is the brunch?](#what-is-the-branch)
+	- [(aside) What is the branch?](#what-is-the-branch)
 	- [Summary](#summary3)
 - [Rebase](#rebase)
 	- [Move the branch](#move-branch)
@@ -55,7 +55,7 @@ Understanding git from its system structure makes git more fun. I have recently 
 <!-- TOC -->
 
 <a id="markdown-what-is-git" name="what-is-git"></a>
-## Whati is Git?
+## What is Git?
 
 <a id="markdown-manage-distribute" name="manage-distribute"></a>
 ### Manage versions and Distribute work
@@ -427,7 +427,7 @@ In fact, the commits are carried over to the merged branch.
 You can use `git log` to see all the commits you've made on the branch and the commits on the merged branch.
 
 <a id="markdown-what-is-the-branch" name="what-is-the-branch"></a>
-### (Aside) What is the brunch
+### (Aside) What is the branch
 We said that a branch is a pointer to a commit, but it also holds another important data.
 It is all the commits that have been made on that branch.
 
